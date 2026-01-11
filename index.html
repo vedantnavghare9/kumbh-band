@@ -112,9 +112,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebas
 import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "PASTE_API_KEY",
-  authDomain: "PASTE_AUTH_DOMAIN",
-  projectId: "PASTE_PROJECT_ID",
+  apiKey: "AIzaSyDVV1zZZDAnqOkmNXKW0ipJXatUYtjV4W4",
+  authDomain:"kumbh-band-dd624.firebaseapp.com",
+  projectId:"kumbh-band-dd624",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -169,7 +169,7 @@ window.connect = () => {
   if (!friendId) return alert("Enter Friend K-ID");
 
   const pairId = [myId, friendId].sort().join("_");
-  pairRef = doc(db, "pairs", pairId);
+  pairRef = doc(db, "bands", pairId);
 
   navigator.geolocation.watchPosition(
     (pos) => {
@@ -224,3 +224,4 @@ window.connect = () => {
 </script>
 </body>
 </html>
+
