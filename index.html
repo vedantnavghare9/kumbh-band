@@ -65,10 +65,11 @@ button.disconnect {
 .kid-box {
   font-size: 26px;
   font-weight: bold;
- margin-top: 6px;
-  color: #e5e7eb;   /* IMPORTANT */
+  margin-top: 6px;
+  color: #e5e7eb;
   letter-spacing: 2px;
 }
+
 </style>
 </head>
 
@@ -84,7 +85,7 @@ button.disconnect {
 <div class="arrow" id="arrow">⬆️</div>
 
 <div>Your K-ID</div>
-<div class="kid-box" id="myId"></div>
+<div class="kid-box" id="myIdElement"></div>
 
 <input id="pairInput" placeholder="Enter Friend K-ID" />
 <br><br>
@@ -117,6 +118,7 @@ let safeRange = 50;
 let isConnected = false;
 let geoWatchId = null;
 let unsubscribeSnapshot = null;
+let myId = null; // Declare myId globally
 
 document.getElementById("safeValue").innerText = safeRange;
 
@@ -126,13 +128,20 @@ window.changeRange = (v) => {
 };
 
 /* ================= K-ID ================= */
-document.addEventListener("DOMContentLoaded", () => {
-  let myId = localStorage.getItem("kid");
-  if (!myId) {
-    myId = "K-" + Math.floor(1000 + Math.random() * 9000);
-    localStorage.setItem("kid", myId);
+function generateKId() {
+  let storedId = localStorage.getItem("kid");
+  if (!storedId) {
+    // Generate K-ID in format: K-XXXX where X is a digit
+    storedId = "K-" + Math.floor(1000 + Math.random() * 9000);
+    localStorage.setItem("kid", storedId);
   }
-  document.getElementById("myId").innerText = myId;
+  return storedId;
+}
+
+// Initialize K-ID on page load
+document.addEventListener("DOMContentLoaded", () => {
+  myId = generateKId();
+  document.getElementById("myIdElement").innerText = myId;
 });
 
 /* ================= UTILS ================= */
@@ -163,12 +172,27 @@ function smoothDistance(d) {
 let pairRef = null;
 
 window.toggleConnection = () => {
+  // Ensure myId is loaded before connecting
+  if (!myId) {
+    myId = generateKId();
+    document.getElementById("myIdElement").innerText = myId;
+  }
+  
   isConnected ? disconnect() : connect();
 };
 
 function connect() {
-  const friendId = pairInput.value.trim();
-  if (!friendId) return alert("Enter Friend K-ID");
+  const friendId = document.getElementById("pairInput").value.trim();
+  if (!friendId) {
+    alert("Enter Friend K-ID");
+    return;
+  }
+
+  // Ensure myId exists
+  if (!myId) {
+    myId = generateKId();
+    document.getElementById("myIdElement").innerText = myId;
+  }
 
   const pairId = [myId, friendId].sort().join("_");
   pairRef = doc(db, "bands", pairId);
@@ -179,7 +203,12 @@ function connect() {
       setDoc(pairRef, {
         [myId]: { lat: pos.coords.latitude, lng: pos.coords.longitude }
       }, { merge: true });
-    }
+    },
+    (error) => {
+      console.error("Geolocation error:", error);
+      alert("Please enable location services");
+    },
+    { enableHighAccuracy: true, maximumAge: 10000, timeout: 5000 }
   );
 
   unsubscribeSnapshot = onSnapshot(pairRef, (snap) => {
@@ -188,12 +217,17 @@ function connect() {
 
     const otherId = Object.keys(data).find(id => id !== myId);
     if (!otherId) {
-      status.innerText = "Waiting for other band…";
+      document.getElementById("status").innerText = "Waiting for other band…";
       return;
     }
 
-    status.innerText = "Connected";
-    status.style.color = "#22c55e";
+    document.getElementById("status").innerText = "Connected";
+    document.getElementById("status").style.color = "#22c55e";
+
+    // Check if both users have location data
+    if (!data[myId] || !data[otherId]) {
+      return;
+    }
 
     const rawDist = getDistance(
       data[myId].lat, data[myId].lng,
@@ -203,15 +237,15 @@ function connect() {
     const dist = smoothDistance(rawDist);
     if (dist === null) return;
 
-    distance.innerText = dist;
+    document.getElementById("distance").innerText = dist;
 
-    circle.style.borderColor =
+    document.getElementById("circle").style.borderColor =
       dist <= safeRange ? "#22c55e" : "#ef4444";
   });
 
   isConnected = true;
-  connectBtn.innerText = "Disconnect";
-  connectBtn.classList.add("disconnect");
+  document.getElementById("connectBtn").innerText = "Disconnect";
+  document.getElementById("connectBtn").classList.add("disconnect");
 }
 
 function disconnect() {
@@ -223,17 +257,20 @@ function disconnect() {
   isConnected = false;
   distanceHistory = [];
 
-  distance.innerText = "--";
-  arrow.style.transform = "rotate(0deg)";
-  status.innerText = "Not connected";
-  status.style.color = "#e5e7eb";
-  circle.style.borderColor = "#64748b";
+  document.getElementById("distance").innerText = "--";
+  document.getElementById("arrow").style.transform = "rotate(0deg)";
+  document.getElementById("status").innerText = "Not connected";
+  document.getElementById("status").style.color = "#e5e7eb";
+  document.getElementById("circle").style.borderColor = "#64748b";
 
-  connectBtn.innerText = "Connect";
-  connectBtn.classList.remove("disconnect");
+  document.getElementById("connectBtn").innerText = "Connect";
+  document.getElementById("connectBtn").classList.remove("disconnect");
 }
 </script>
 
 </body>
 </html>
+
+
+
 
