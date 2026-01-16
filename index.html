@@ -14,10 +14,7 @@ body {
   padding: 24px;
 }
 
-h2 {
-  font-weight: 600;
-  letter-spacing: 1px;
-}
+h2 { font-weight: 600; }
 
 .circle {
   width: 240px;
@@ -29,28 +26,29 @@ h2 {
   justify-content: center;
   font-size: 42px;
   margin: 24px auto;
-  box-shadow: 0 0 40px rgba(34,197,94,0.25);
-  transition: all 0.3s ease;
+  transition: border-color 0.3s ease;
 }
 
 #status {
-  font-size: 15px;
-  margin-bottom: 16px;
+  font-size: 14px;
   letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.arrow {
+  font-size: 50px;
+  transition: transform 0.3s ease-out;
 }
 
 input {
   padding: 12px;
-  font-size: 16px;
   border-radius: 12px;
   border: none;
   width: 220px;
-  outline: none;
 }
 
 button {
   padding: 10px 18px;
-  font-size: 16px;
   border-radius: 14px;
   border: none;
   margin: 6px;
@@ -59,19 +57,15 @@ button {
   cursor: pointer;
 }
 
-button:active { transform: scale(0.96); }
+button.disconnect {
+  background: #ef4444;
+  color: white;
+}
 
 .kid-box {
   font-size: 26px;
   font-weight: bold;
-  margin: 8px 0;
-  letter-spacing: 2px;
-}
-
-.arrow {
-  font-size: 46px;
-  margin-top: 10px;
-  transition: transform 0.4s ease;
+  margin: 6px;
 }
 </style>
 </head>
@@ -90,21 +84,17 @@ button:active { transform: scale(0.96); }
 <div>Your K-ID</div>
 <div class="kid-box" id="myId"></div>
 
-<br>
 <input id="pairInput" placeholder="Enter Friend K-ID" />
 <br><br>
 
 <div>
-  <div>Safe Range</div>
-  <div style="font-size:24px;font-weight:bold">
-    <span id="safeValue">50</span> m
-  </div>
+  Safe Range: <span id="safeValue">50</span> m <br>
   <button onclick="changeRange(-10)">−</button>
   <button onclick="changeRange(10)">+</button>
 </div>
 
 <br>
-<button onclick="connect()">Connect</button>
+<button id="connectBtn" onclick="toggleConnection()">Connect</button>
 
 <script type="module">
 /* ================= FIREBASE ================= */
@@ -113,39 +103,19 @@ import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/f
 
 const firebaseConfig = {
   apiKey: "AIzaSyDVV1zZZDAnqOkmNXKW0ipJXatUYtjV4W4",
-  authDomain:"kumbh-band-dd624.firebaseapp.com",
-  projectId:"kumbh-band-dd624",
+  authDomain: "kumbh-band-dd624.firebaseapp.com",
+  projectId: "kumbh-band-dd624",
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* ================= UTILS ================= */
-function getDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371e3;
-  const φ1 = lat1 * Math.PI / 180;
-  const φ2 = lat2 * Math.PI / 180;
-  const Δφ = (lat2 - lat1) * Math.PI / 180;
-  const Δλ = (lon2 - lon1) * Math.PI / 180;
-
-  const a = Math.sin(Δφ/2)**2 +
-            Math.cos(φ1)*Math.cos(φ2)*Math.sin(Δλ/2)**2;
-
-  return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
-}
-
-function getBearing(lat1, lon1, lat2, lon2) {
-  const φ1 = lat1 * Math.PI / 180;
-  const φ2 = lat2 * Math.PI / 180;
-  const Δλ = (lon2 - lon1) * Math.PI / 180;
-  const y = Math.sin(Δλ) * Math.cos(φ2);
-  const x = Math.cos(φ1) * Math.sin(φ2) -
-            Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
-  return (Math.atan2(y,x)*180/Math.PI+360)%360;
-}
-
 /* ================= STATE ================= */
 let safeRange = 50;
+let isConnected = false;
+let geoWatchId = null;
+let unsubscribeSnapshot = null;
+
 document.getElementById("safeValue").innerText = safeRange;
 
 window.changeRange = (v) => {
@@ -156,82 +126,109 @@ window.changeRange = (v) => {
 /* ================= K-ID ================= */
 let myId = localStorage.getItem("kid");
 if (!myId) {
-  myId = "K-" + Math.floor(1000 + Math.random()*9000);
+  myId = "K-" + Math.floor(1000 + Math.random() * 9000);
   localStorage.setItem("kid", myId);
 }
-document.getElementById("myId").innerText = myId;
+myIdEl.innerText = myId;
 
-/* ================= CONNECT ================= */
+/* ================= UTILS ================= */
+function getDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371e3;
+  const φ1 = lat1 * Math.PI / 180;
+  const φ2 = lat2 * Math.PI / 180;
+  const Δφ = (lat2 - lat1) * Math.PI / 180;
+  const Δλ = (lon2 - lon1) * Math.PI / 180;
+
+  const a = Math.sin(Δφ/2)**2 +
+            Math.cos(φ1)*Math.cos(φ2)*
+            Math.sin(Δλ/2)**2;
+
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+/* ================= SMOOTHING ================= */
+let distanceHistory = [];
+function smoothDistance(d) {
+  if (d > 500) return null;
+  distanceHistory.push(d);
+  if (distanceHistory.length > 5) distanceHistory.shift();
+  return Math.round(distanceHistory.reduce((a,b)=>a+b)/distanceHistory.length);
+}
+
+/* ================= CONNECT / DISCONNECT ================= */
 let pairRef = null;
 
-window.connect = () => {
-  const friendId = document.getElementById("pairInput").value.trim();
+window.toggleConnection = () => {
+  isConnected ? disconnect() : connect();
+};
+
+function connect() {
+  const friendId = pairInput.value.trim();
   if (!friendId) return alert("Enter Friend K-ID");
 
   const pairId = [myId, friendId].sort().join("_");
   pairRef = doc(db, "bands", pairId);
 
-  navigator.geolocation.watchPosition(
+  geoWatchId = navigator.geolocation.watchPosition(
     (pos) => {
+      if (pos.coords.accuracy > 30) return;
       setDoc(pairRef, {
-        [myId]: {
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude
-        }
+        [myId]: { lat: pos.coords.latitude, lng: pos.coords.longitude }
       }, { merge: true });
-    },
-    () => alert("Location permission required"),
-    { enableHighAccuracy: true }
+    }
   );
 
-  onSnapshot(pairRef, (snap) => {
+  unsubscribeSnapshot = onSnapshot(pairRef, (snap) => {
     const data = snap.data();
-    if (!data || !data[myId]) return;
+    if (!data) return;
 
-    const otherId = Object.keys(data).find(u => u !== myId);
-
-if (!otherId || !data[otherId]) {
-  status.innerText = "Waiting for other person…";
-  document.getElementById("distance").innerText = "--";
-  document.getElementById("arrow").style.opacity = "0.3";
-  circle.style.borderColor = "#64748b";
-  return;
-}
-
+    const otherId = Object.keys(data).find(id => id !== myId);
+    if (!otherId) {
+      status.innerText = "Waiting for other band…";
+      return;
     }
-    let smoothAngle = 0;
 
-    const dist = getDistance(
+    status.innerText = "Connected";
+    status.style.color = "#22c55e";
+
+    const rawDist = getDistance(
       data[myId].lat, data[myId].lng,
       data[otherId].lat, data[otherId].lng
     );
 
-    const bearing = getBearing(
-      data[myId].lat, data[myId].lng,
-      data[otherId].lat, data[otherId].lng
-    );
+    const dist = smoothDistance(rawDist);
+    if (dist === null) return;
 
-    document.getElementById("distance").innerText = dist;
-    smoothAngle = smoothAngle * 0.7 + relativeAngle * 0.3;
-document.getElementById("arrow").style.transform =
-  `rotate(${smoothAngle}deg)`;
+    distance.innerText = dist;
 
-    if (dist <= safeRange) {
-      circle.style.borderColor = "#22c55e";
-      status.innerText = "SAFE";
-      status.style.color = "#22c55e";
-    } else {
-      circle.style.borderColor = "#ef4444";
-      status.innerText = "OUT OF RANGE";
-      status.style.color = "#ef4444";
-      navigator.vibrate?.([200,100,200]);
-    }
+    circle.style.borderColor =
+      dist <= safeRange ? "#22c55e" : "#ef4444";
   });
 
-  status.innerText = "Connected";
-};
+  isConnected = true;
+  connectBtn.innerText = "Disconnect";
+  connectBtn.classList.add("disconnect");
+}
+
+function disconnect() {
+  if (geoWatchId !== null) navigator.geolocation.clearWatch(geoWatchId);
+  if (unsubscribeSnapshot) unsubscribeSnapshot();
+
+  geoWatchId = null;
+  unsubscribeSnapshot = null;
+  isConnected = false;
+  distanceHistory = [];
+
+  distance.innerText = "--";
+  arrow.style.transform = "rotate(0deg)";
+  status.innerText = "Not connected";
+  status.style.color = "#e5e7eb";
+  circle.style.borderColor = "#64748b";
+
+  connectBtn.innerText = "Connect";
+  connectBtn.classList.remove("disconnect");
+}
 </script>
+
 </body>
 </html>
-
-
