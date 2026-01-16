@@ -65,7 +65,9 @@ button.disconnect {
 .kid-box {
   font-size: 26px;
   font-weight: bold;
-  margin: 6px;
+ margin-top: 6px;
+  color: #e5e7eb;   /* IMPORTANT */
+  letter-spacing: 2px;
 }
 </style>
 </head>
@@ -124,12 +126,14 @@ window.changeRange = (v) => {
 };
 
 /* ================= K-ID ================= */
-let myId = localStorage.getItem("kid");
-if (!myId) {
-  myId = "K-" + Math.floor(1000 + Math.random() * 9000);
-  localStorage.setItem("kid", myId);
-}
-myIdEl.innerText = myId;
+document.addEventListener("DOMContentLoaded", () => {
+  let myId = localStorage.getItem("kid");
+  if (!myId) {
+    myId = "K-" + Math.floor(1000 + Math.random() * 9000);
+    localStorage.setItem("kid", myId);
+  }
+  document.getElementById("myId").innerText = myId;
+});
 
 /* ================= UTILS ================= */
 function getDistance(lat1, lon1, lat2, lon2) {
@@ -232,3 +236,4 @@ function disconnect() {
 
 </body>
 </html>
+
