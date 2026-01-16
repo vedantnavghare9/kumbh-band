@@ -44,14 +44,44 @@ h2 {
   align-items: center;
   justify-content: center;
   margin: 20px auto;
-  transition: all 0.3s ease;
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
   box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.circle::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(96, 165, 250, 0.1) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.circle.safe-circle::after {
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.1) 0%, transparent 70%);
+  opacity: 0.5;
+}
+
+.circle.danger-circle::after {
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.1) 0%, transparent 70%);
+  opacity: 0.5;
 }
 
 .distance {
   font-size: 48px;
   font-weight: 700;
   color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.distance.changing {
+  transform: scale(1.1);
+  color: #fbbf24;
 }
 
 .unit {
@@ -81,6 +111,7 @@ h2 {
 
 .arrow {
   transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
 }
 
 .kid-section {
@@ -191,10 +222,14 @@ input:focus {
 
 .button-section {
   margin: 30px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
 }
 
 button {
-  padding: 16px 40px;
+  padding: 16px 32px;
   border-radius: 25px;
   border: none;
   font-size: 18px;
@@ -226,6 +261,40 @@ button {
   box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
 }
 
+.simulation-controls {
+  background: rgba(30, 41, 59, 0.7);
+  padding: 20px;
+  border-radius: 16px;
+  margin: 20px 0;
+}
+
+.simulation-label {
+  font-size: 14px;
+  color: #94a3b8;
+  margin-bottom: 15px;
+}
+
+.sim-btn {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white;
+  margin: 5px;
+  padding: 12px 24px;
+  min-width: 120px;
+}
+
+.sim-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+}
+
+.sim-btn-group {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
 .instructions {
   font-size: 12px;
   color: #64748b;
@@ -255,20 +324,18 @@ button {
   100% { opacity: 1; }
 }
 
-.safe-circle {
-  border-color: #22c55e;
-  box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
-}
-
-.warning-circle {
-  border-color: #f59e0b;
-  box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
 }
 
 .danger-circle {
-  border-color: #ef4444;
-  box-shadow: 0 0 30px rgba(239, 68, 68, 0.3);
-  animation: pulse 1s infinite;
+  animation: pulse 1s infinite, shake 0.5s ease-in-out;
+}
+
+.warning-circle {
+  animation: pulse 2s infinite;
 }
 
 @media (max-width: 480px) {
@@ -283,6 +350,16 @@ button {
   
   .kid-box {
     font-size: 28px;
+  }
+  
+  .sim-btn-group {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .sim-btn {
+    width: 90%;
+    max-width: 200px;
   }
 }
 </style>
@@ -334,15 +411,34 @@ button {
     </div>
   </div>
 
+  <!-- Simulation Controls -->
+  <div class="simulation-controls">
+    <div class="simulation-label">TEST MOVEMENT SIMULATION</div>
+    <div class="sim-btn-group">
+      <button class="sim-btn" onclick="simulateDistance(10)">Move Closer (-10m)</button>
+      <button class="sim-btn" onclick="simulateDistance(-10)">Move Away (+10m)</button>
+    </div>
+    <div class="sim-btn-group">
+      <button class="sim-btn" onclick="simulateDistance(30)">Move Closer (-30m)</button>
+      <button class="sim-btn" onclick="simulateDistance(-30)">Move Away (+30m)</button>
+    </div>
+    <div style="margin-top: 10px; font-size: 12px; color: #94a3b8;">
+      Current simulated position: <span id="simPosition">0m</span>
+    </div>
+  </div>
+
   <!-- Connect/Disconnect Button -->
   <div class="button-section">
     <button id="connectBtn" onclick="toggleConnection()">CONNECT BAND</button>
   </div>
 
   <div class="instructions">
-    <strong>How it works:</strong> Enter your friend's K-ID and press CONNECT. 
-    The circle shows distance between you. Green = Safe, Red = Too Far. 
-    Arrow points toward your friend. Adjust safe range as needed.
+    <strong>How it works:</strong> 
+    1. Enter your friend's K-ID and press CONNECT<br>
+    2. Use simulation buttons to test distance changes<br>
+    3. Circle changes color: Green = Safe, Yellow = Warning, Red = Danger<br>
+    4. Arrow points toward your friend<br>
+    5. Adjust safe range as needed
   </div>
 </div>
 
@@ -372,6 +468,9 @@ let unsubscribeSnapshot = null;
 let myId = null;
 let friendId = null;
 let distanceHistory = [];
+let simulatedBaseDistance = 0; // Base distance offset for simulation
+let currentDistance = 0;
+let simulationMode = false; // Whether we're in simulation mode
 
 // ================= DOM ELEMENTS =================
 const elements = {
@@ -383,7 +482,8 @@ const elements = {
   myId: document.getElementById('myId'),
   pairInput: document.getElementById('pairInput'),
   safeValue: document.getElementById('safeValue'),
-  connectBtn: document.getElementById('connectBtn')
+  connectBtn: document.getElementById('connectBtn'),
+  simPosition: document.getElementById('simPosition')
 };
 
 // ================= INITIALIZATION =================
@@ -413,8 +513,72 @@ window.changeRange = function(change) {
   safeRange = Math.max(10, Math.min(100, safeRange + change));
   elements.safeValue.textContent = safeRange;
   localStorage.setItem('kumbhBandSafeRange', safeRange.toString());
-  updateUI();
+  updateDistanceUI(currentDistance);
 };
+
+// ================= SIMULATION CONTROL =================
+window.simulateDistance = function(change) {
+  if (!isConnected) {
+    alert('Please connect first to simulate movement');
+    return;
+  }
+  
+  // Add to simulated base distance
+  simulatedBaseDistance += change;
+  
+  // Ensure simulated distance doesn't go below 0
+  if (simulatedBaseDistance < 0) simulatedBaseDistance = 0;
+  
+  // Update simulation display
+  elements.simPosition.textContent = `${simulatedBaseDistance}m`;
+  
+  // If we're in simulation mode, update the distance display
+  if (simulationMode) {
+    const newDistance = Math.max(1, currentDistance + change);
+    currentDistance = newDistance;
+    updateDistanceUI(newDistance);
+    
+    // Add visual feedback
+    elements.distance.classList.add('changing');
+    setTimeout(() => {
+      elements.distance.classList.remove('changing');
+    }, 300);
+  } else {
+    // If not in simulation mode but we have a real connection,
+    // simulate by modifying the stored location
+    simulateGeolocationMove(change);
+  }
+};
+
+// ================= SIMULATE GEOLOCATION MOVEMENT =================
+function simulateGeolocationMove(change) {
+  // This function simulates movement by adjusting the stored geolocation
+  if (!geoWatchId || !simulationMode) return;
+  
+  // Get current position
+  navigator.geolocation.getCurrentPosition((position) => {
+    // Calculate new position (simplified - moving in random direction)
+    const latChange = (change / 111320) * (Math.random() > 0.5 ? 1 : -1);
+    const lngChange = (change / 111320) * (Math.random() > 0.5 ? 1 : -1) / Math.cos(position.coords.latitude * Math.PI / 180);
+    
+    const newLat = position.coords.latitude + latChange;
+    const newLng = position.coords.longitude + lngChange;
+    
+    // Update Firebase with simulated position
+    const pairId = [myId, friendId].sort().join('_');
+    const myLocationRef = doc(db, 'bands', pairId);
+    
+    setDoc(myLocationRef, {
+      [myId]: {
+        lat: newLat,
+        lng: newLng,
+        timestamp: Date.now(),
+        simulated: true // Mark as simulated
+      }
+    }, { merge: true });
+    
+  }, null, { enableHighAccuracy: true });
+}
 
 // ================= DISTANCE CALCULATION =================
 function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -429,7 +593,10 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
             Math.sin(Δλ/2) * Math.sin(Δλ/2);
   
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  return R * c;
+  const rawDistance = R * c;
+  
+  // Add simulated base distance if in simulation mode
+  return simulationMode ? Math.max(1, rawDistance + simulatedBaseDistance) : rawDistance;
 }
 
 // ================= DISTANCE SMOOTHING =================
@@ -450,7 +617,7 @@ function updateUI() {
   // Update status indicator
   if (isConnected) {
     elements.statusIndicator.className = 'status-indicator connected';
-    elements.statusText.textContent = 'Connected';
+    elements.statusText.textContent = simulationMode ? 'Connected (Simulation)' : 'Connected';
     elements.statusText.style.color = '#22c55e';
     elements.connectBtn.textContent = 'DISCONNECT BAND';
     elements.connectBtn.classList.add('disconnect');
@@ -467,20 +634,35 @@ function updateDistanceUI(distance) {
   if (distance === null || isNaN(distance)) {
     elements.distance.textContent = '--';
     elements.circle.className = 'circle';
+    currentDistance = 0;
     return;
   }
 
-  // Update distance display
+  currentDistance = distance;
+  
+  // Update distance display with animation
   elements.distance.textContent = distance;
+  elements.distance.style.transform = 'scale(1.1)';
+  setTimeout(() => {
+    elements.distance.style.transform = 'scale(1)';
+  }, 200);
   
   // Update circle color based on safety
   elements.circle.className = 'circle';
   if (distance <= safeRange) {
     elements.circle.classList.add('safe-circle');
+    elements.statusText.style.color = '#22c55e';
   } else if (distance <= safeRange * 1.5) {
     elements.circle.classList.add('warning-circle');
+    elements.statusText.style.color = '#f59e0b';
   } else {
     elements.circle.classList.add('danger-circle');
+    elements.statusText.style.color = '#ef4444';
+    
+    // If way too far, show warning in status
+    if (distance > safeRange * 2) {
+      elements.statusText.textContent = '⚠️ TOO FAR! Move closer';
+    }
   }
 }
 
@@ -493,7 +675,7 @@ function updateDirectionUI(bearing) {
   // Rotate arrow to point toward friend
   elements.arrow.style.transform = `rotate(${bearing}deg)`;
   
-  // Change arrow color based on direction
+  // Change arrow based on direction
   if (bearing >= -45 && bearing <= 45) {
     elements.arrow.textContent = '⬆️';
   } else if (bearing > 45 && bearing <= 135) {
@@ -518,31 +700,63 @@ function connect() {
   friendId = elements.pairInput.value.trim().toUpperCase();
   
   if (!friendId) {
-    alert('Please enter your friend\'s K-ID');
-    return;
+    // If no friend ID entered, enable simulation mode with a fake friend
+    friendId = 'K-SIM'; // Simulation friend ID
+    simulationMode = true;
+    elements.pairInput.value = friendId;
+  } else {
+    simulationMode = friendId === 'K-SIM';
   }
   
-  if (friendId === myId) {
+  if (friendId === myId && !simulationMode) {
     alert('You cannot connect to yourself');
     return;
   }
   
-  if (!friendId.match(/^K-\d{4}$/)) {
-    alert('Please enter a valid K-ID (format: K-1234)');
+  if (!simulationMode && !friendId.match(/^K-\d{4}$/)) {
+    alert('Please enter a valid K-ID (format: K-1234) or use K-SIM for simulation');
     return;
   }
   
-  // Start geolocation tracking
-  startGeoTracking();
+  // Reset simulation state
+  simulatedBaseDistance = 0;
+  elements.simPosition.textContent = '0m';
   
-  // Subscribe to friend's location
-  subscribeToFriend();
+  if (simulationMode) {
+    // Start simulation mode
+    startSimulationMode();
+  } else {
+    // Start real connection
+    startGeoTracking();
+    subscribeToFriend();
+  }
   
   isConnected = true;
   updateUI();
   
-  elements.statusText.textContent = 'Connecting...';
+  elements.statusText.textContent = simulationMode ? 'Starting simulation...' : 'Connecting...';
   elements.statusText.style.color = '#f59e0b';
+}
+
+function startSimulationMode() {
+  // In simulation mode, we don't use real geolocation
+  // Instead, we simulate two devices with a starting distance
+  currentDistance = 20; // Start at 20 meters
+  updateDistanceUI(currentDistance);
+  
+  // Simulate periodic distance changes
+  simulationInterval = setInterval(() => {
+    // Small random drift to simulate natural movement
+    const drift = (Math.random() - 0.5) * 5;
+    currentDistance = Math.max(1, currentDistance + drift);
+    updateDistanceUI(currentDistance);
+  }, 3000);
+  
+  // Update status
+  setTimeout(() => {
+    elements.statusText.textContent = 'Connected (Simulation Mode)';
+    elements.statusText.style.color = '#8b5cf6';
+  }, 1000);
 }
 
 function disconnect() {
@@ -558,15 +772,25 @@ function disconnect() {
     unsubscribeSnapshot = null;
   }
   
+  // Stop simulation interval
+  if (simulationInterval) {
+    clearInterval(simulationInterval);
+    simulationInterval = null;
+  }
+  
   // Reset state
   isConnected = false;
+  simulationMode = false;
   distanceHistory = [];
+  simulatedBaseDistance = 0;
+  currentDistance = 0;
   
   // Reset UI
   updateDistanceUI(null);
   updateDirectionUI(null);
   elements.statusText.textContent = 'Disconnected';
   elements.statusText.style.color = '#ef4444';
+  elements.simPosition.textContent = '0m';
   
   setTimeout(() => {
     updateUI();
@@ -705,7 +929,28 @@ document.addEventListener('DOMContentLoaded', () => {
       () => console.warn('Location permission denied')
     );
   }
+  
+  // Add keyboard shortcuts for simulation
+  document.addEventListener('keydown', (e) => {
+    if (!isConnected) return;
+    
+    switch(e.key) {
+      case 'ArrowUp':
+      case 'w':
+      case 'W':
+        simulateDistance(-10); // Move away
+        break;
+      case 'ArrowDown':
+      case 's':
+      case 'S':
+        simulateDistance(10); // Move closer
+        break;
+    }
+  });
 });
+
+// Global variable for simulation interval
+let simulationInterval = null;
 </script>
 
 </body>
