@@ -2,20 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Kumbh Band - GPS Prototype</title>
+<title>Kumbh Band - Working Prototype</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
-:root {
-  --primary: #22c55e;
-  --danger: #ef4444;
-  --warning: #f59e0b;
-  --dark: #0f172a;
-  --darker: #020617;
-  --light: #e2e8f0;
-  --gray: #64748b;
-}
-
 * {
   margin: 0;
   padding: 0;
@@ -23,17 +13,16 @@
 }
 
 body {
-  background: linear-gradient(135deg, var(--darker), var(--dark));
-  color: var(--light);
-  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: #0f172a;
+  color: white;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   min-height: 100vh;
   padding: 20px;
 }
 
 .container {
-  max-width: 500px;
+  max-width: 400px;
   margin: 0 auto;
-  padding: 20px;
 }
 
 /* Header */
@@ -41,150 +30,91 @@ body {
   text-align: center;
   margin-bottom: 30px;
   padding: 20px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
-  border: 2px solid rgba(34, 197, 94, 0.2);
 }
 
 .logo {
   font-size: 2.5rem;
-  font-weight: 800;
-  color: var(--primary);
+  font-weight: 900;
+  color: #22c55e;
   margin-bottom: 10px;
-  text-transform: uppercase;
-  letter-spacing: 3px;
 }
 
-.tagline {
-  color: var(--gray);
+.subtitle {
+  color: #94a3b8;
   font-size: 0.9rem;
-  margin-bottom: 5px;
 }
 
-/* Distance Display */
-.distance-section {
-  background: rgba(255, 255, 255, 0.05);
+/* Main Display */
+.main-display {
+  background: #1e293b;
   border-radius: 20px;
   padding: 30px;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   text-align: center;
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid #334155;
 }
 
 .distance-circle {
   width: 200px;
   height: 200px;
   border-radius: 50%;
-  border: 8px solid var(--gray);
+  border: 10px solid #475569;
   margin: 0 auto 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  transition: all 0.4s ease;
-  position: relative;
-  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
-.distance-circle.safe {
-  border-color: var(--primary);
-  box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
-  animation: pulseGreen 2s infinite;
-}
-
-.distance-circle.warning {
-  border-color: var(--warning);
-  box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
-  animation: pulseYellow 1.5s infinite;
-}
-
-.distance-circle.danger {
-  border-color: var(--danger);
-  box-shadow: 0 0 30px rgba(239, 68, 68, 0.3);
-  animation: pulseRed 1s infinite;
-}
+.distance-circle.safe { border-color: #22c55e; }
+.distance-circle.warning { border-color: #f59e0b; }
+.distance-circle.danger { border-color: #ef4444; }
 
 .distance-value {
   font-size: 48px;
   font-weight: 800;
-  color: white;
-  line-height: 1;
 }
 
 .distance-unit {
-  font-size: 18px;
-  color: var(--gray);
-  margin-top: 5px;
-}
-
-.distance-label {
-  font-size: 14px;
-  color: var(--gray);
-  margin-top: 15px;
-}
-
-/* Navigation Arrow */
-.navigation-section {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
-  padding: 25px;
-  margin-bottom: 25px;
-  text-align: center;
-}
-
-.nav-title {
-  color: var(--gray);
-  font-size: 14px;
-  margin-bottom: 20px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.nav-arrow {
-  font-size: 70px;
-  margin: 15px 0;
-  transition: transform 0.5s ease;
-}
-
-.nav-direction {
+  color: #94a3b8;
   font-size: 16px;
-  font-weight: 600;
-  color: var(--primary);
-  margin-top: 10px;
 }
 
-/* K-ID Section */
-.kid-section {
-  background: rgba(255, 255, 255, 0.05);
+.status {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+/* Connection Panel */
+.connection-panel {
+  background: #1e293b;
   border-radius: 20px;
   padding: 25px;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
-.kid-display {
-  background: rgba(15, 23, 42, 0.7);
-  border-radius: 15px;
-  padding: 20px;
-  text-align: center;
+.kid-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 25px;
-  border: 2px solid rgba(34, 197, 94, 0.3);
+  padding: 15px;
+  background: #0f172a;
+  border-radius: 15px;
 }
 
 .kid-label {
-  color: var(--gray);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 10px;
+  color: #94a3b8;
+  font-size: 14px;
 }
 
 .kid-value {
-  font-size: 32px;
+  font-size: 24px;
   font-weight: 800;
-  color: var(--primary);
+  color: #22c55e;
   font-family: monospace;
-  letter-spacing: 3px;
-  text-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
 }
 
 .input-group {
@@ -193,212 +123,136 @@ body {
 
 .input-label {
   display: block;
-  color: var(--gray);
-  font-size: 14px;
+  color: #94a3b8;
   margin-bottom: 10px;
+  font-size: 14px;
 }
 
 .input-field {
   width: 100%;
   padding: 15px;
-  background: rgba(15, 23, 42, 0.7);
-  border: 2px solid var(--gray);
+  background: #0f172a;
+  border: 2px solid #475569;
   border-radius: 12px;
   color: white;
   font-size: 16px;
-  font-weight: 600;
   text-align: center;
-  transition: all 0.3s;
 }
 
 .input-field:focus {
   outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+  border-color: #22c55e;
+}
+
+.buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.btn {
+  flex: 1;
+  padding: 15px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background: #22c55e;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #16a34a;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #2563eb;
+  transform: translateY(-2px);
+}
+
+.btn-danger {
+  background: #ef4444;
+  color: white;
 }
 
 /* Safe Range */
-.safe-range-section {
-  background: rgba(255, 255, 255, 0.05);
+.safe-range {
+  background: #1e293b;
   border-radius: 20px;
   padding: 25px;
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .range-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   margin-bottom: 20px;
 }
 
-.range-label {
-  color: var(--gray);
-  font-size: 14px;
-}
-
 .range-value {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: 800;
-  color: var(--primary);
+  color: #22c55e;
 }
 
 .range-slider {
   width: 100%;
-  height: 8px;
-  -webkit-appearance: none;
-  background: var(--gray);
-  border-radius: 4px;
-  outline: none;
   margin: 20px 0;
 }
 
-.range-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: var(--primary);
-  border: 3px solid white;
-  cursor: pointer;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-}
-
-.range-limits {
+.range-labels {
   display: flex;
   justify-content: space-between;
-  color: var(--gray);
+  color: #94a3b8;
   font-size: 12px;
-  margin-top: 10px;
 }
 
-/* Status Section */
-.status-section {
-  background: rgba(255, 255, 255, 0.05);
+/* Testing Panel */
+.testing-panel {
+  background: #1e293b;
   border-radius: 20px;
-  padding: 20px;
-  margin-bottom: 25px;
+  padding: 25px;
+  margin-bottom: 20px;
 }
 
-.status-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 15px 0;
-  padding: 15px;
-  background: rgba(15, 23, 42, 0.7);
-  border-radius: 12px;
-}
-
-.status-label {
-  color: var(--gray);
-  font-size: 14px;
-}
-
-.status-value {
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.status-connected {
-  color: var(--primary);
-}
-
-.status-disconnected {
-  color: var(--danger);
-}
-
-/* Buttons */
-.buttons-section {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-bottom: 25px;
-}
-
-.btn {
-  padding: 18px;
-  border: none;
-  border-radius: 15px;
-  font-size: 18px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.btn-connect {
-  background: linear-gradient(135deg, var(--primary), #16a34a);
-  color: white;
-  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
-}
-
-.btn-connect:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
-}
-
-.btn-connect.connected {
-  background: linear-gradient(135deg, var(--danger), #dc2626);
-  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
-}
-
-.btn-simulate {
-  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
-  color: white;
-  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
-}
-
-.btn-simulate:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
-}
-
-/* GPS Info */
-.gps-info {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
-  padding: 20px;
-  margin-bottom: 25px;
-}
-
-.gps-title {
-  color: var(--gray);
+.test-title {
+  color: #94a3b8;
   font-size: 14px;
   margin-bottom: 15px;
   text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 1px;
 }
 
-.gps-stats {
+.test-buttons {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
-.gps-stat {
-  background: rgba(15, 23, 42, 0.7);
-  border-radius: 12px;
-  padding: 15px;
-  text-align: center;
-}
-
-.gps-stat-label {
-  color: var(--gray);
-  font-size: 12px;
-  margin-bottom: 8px;
-}
-
-.gps-stat-value {
-  font-size: 18px;
-  font-weight: 700;
+.test-btn {
+  padding: 12px;
+  background: #0f172a;
+  border: 2px solid #475569;
+  border-radius: 10px;
   color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.test-btn:hover {
+  background: #475569;
+  transform: translateY(-2px);
 }
 
 /* Alert */
@@ -407,459 +261,401 @@ body {
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--danger);
+  background: #ef4444;
   color: white;
   padding: 15px 25px;
   border-radius: 12px;
   font-weight: 700;
-  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
   display: none;
   z-index: 1000;
-  animation: slideDown 0.3s ease;
-  max-width: 90%;
-  text-align: center;
 }
 
 /* Animations */
-@keyframes pulseGreen {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.8; }
-}
-
-@keyframes pulseYellow {
+@keyframes pulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.7; }
 }
 
-@keyframes pulseRed {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+.pulse {
+  animation: pulse 1s infinite;
 }
 
-@keyframes slideDown {
-  from { transform: translateX(-50%) translateY(-20px); opacity: 0; }
-  to { transform: translateX(-50%) translateY(0); opacity: 1; }
+/* Device List */
+.device-list {
+  background: #1e293b;
+  border-radius: 20px;
+  padding: 20px;
+  margin-top: 20px;
 }
 
-@keyframes vibrate {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-2px); }
-  75% { transform: translateX(2px); }
+.device-item {
+  padding: 10px;
+  background: #0f172a;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.vibrating {
-  animation: vibrate 0.1s linear infinite;
+.device-kid {
+  color: #22c55e;
+  font-weight: 600;
 }
 
-/* Responsive */
-@media (max-width: 500px) {
-  .container {
-    padding: 10px;
-  }
-  
-  .distance-circle {
-    width: 170px;
-    height: 170px;
-  }
-  
-  .distance-value {
-    font-size: 40px;
-  }
-  
-  .kid-value {
-    font-size: 26px;
-  }
-  
-  .gps-stats {
-    grid-template-columns: 1fr;
-  }
+.device-distance {
+  color: white;
+  font-weight: 700;
 }
 </style>
 </head>
 
 <body>
 
-<!-- Alert -->
-<div class="alert" id="alertBox"></div>
+<div class="alert" id="alertBox">⚠️ Test Alert</div>
 
 <div class="container">
   <!-- Header -->
   <div class="header">
-    <div class="logo">Kumbh Band</div>
-    <div class="tagline">Stay Connected. Stay Safe.</div>
-    <div class="tagline">GPS Prototype v1.0</div>
+    <div class="logo">KUMBH BAND</div>
+    <div class="subtitle">Real-time distance tracking</div>
   </div>
 
-  <!-- Distance Display -->
-  <div class="distance-section">
+  <!-- Main Display -->
+  <div class="main-display">
     <div class="distance-circle" id="distanceCircle">
       <div class="distance-value" id="distanceValue">--</div>
       <div class="distance-unit">meters</div>
     </div>
-    <div class="distance-label">Live distance between bands</div>
+    <div class="status" id="statusText">Not connected</div>
   </div>
 
-  <!-- Navigation -->
-  <div class="navigation-section">
-    <div class="nav-title">Direction to your friend</div>
-    <div class="nav-arrow" id="navArrow">⬆️</div>
-    <div class="nav-direction" id="navDirection">--</div>
-  </div>
-
-  <!-- K-ID Section -->
-  <div class="kid-section">
-    <div class="kid-display">
-      <div class="kid-label">Your Unique Band ID</div>
-      <div class="kid-value" id="myKid">Loading...</div>
+  <!-- Connection Panel -->
+  <div class="connection-panel">
+    <div class="kid-section">
+      <div class="kid-label">YOUR BAND ID</div>
+      <div class="kid-value" id="myKid">K-0000</div>
     </div>
     
     <div class="input-group">
-      <label class="input-label">Enter friend's Band ID</label>
-      <input type="text" class="input-field" id="friendKid" placeholder="Enter K-ID (e.g., K-1234)" maxlength="6">
+      <label class="input-label">ENTER FRIEND'S BAND ID</label>
+      <input type="text" class="input-field" id="friendKid" placeholder="K-1234" maxlength="6">
+    </div>
+    
+    <div class="buttons">
+      <button class="btn btn-primary" id="connectBtn" onclick="connectBand()">CONNECT</button>
+      <button class="btn btn-secondary" onclick="openTestWindow()">TEST</button>
     </div>
   </div>
 
   <!-- Safe Range -->
-  <div class="safe-range-section">
+  <div class="safe-range">
     <div class="range-header">
-      <span class="range-label">Safe Range Limit</span>
+      <span class="range-label">SAFE RANGE</span>
       <span class="range-value" id="safeRangeValue">50</span>
     </div>
     <input type="range" min="10" max="100" value="50" class="range-slider" id="safeRangeSlider" 
            oninput="updateSafeRange(this.value)">
-    <div class="range-limits">
-      <span>10m (Close)</span>
-      <span>100m (Far)</span>
+    <div class="range-labels">
+      <span>10m</span>
+      <span>100m</span>
     </div>
   </div>
 
-  <!-- Status -->
-  <div class="status-section">
-    <div class="status-item">
-      <span class="status-label">Connection Status</span>
-      <span class="status-value status-disconnected" id="connectionStatus">Disconnected</span>
+  <!-- Testing Panel -->
+  <div class="testing-panel">
+    <div class="test-title">TEST MOVEMENT SIMULATION</div>
+    <div class="test-buttons">
+      <button class="test-btn" onclick="simulateMovement(-5)">⬇️ 5m Closer</button>
+      <button class="test-btn" onclick="simulateMovement(5)">⬆️ 5m Away</button>
+      <button class="test-btn" onclick="simulateMovement(-20)">⏬ 20m Closer</button>
+      <button class="test-btn" onclick="simulateMovement(20)">⏫ 20m Away</button>
     </div>
-    <div class="status-item">
-      <span class="status-label">GPS Status</span>
-      <span class="status-value" id="gpsStatus">--</span>
-    </div>
-    <div class="status-item">
-      <span class="status-label">Battery</span>
-      <span class="status-value">94%</span>
-    </div>
+    <div class="test-title" id="simulationStatus">Simulation: OFF</div>
   </div>
 
-  <!-- GPS Info -->
-  <div class="gps-info">
-    <div class="gps-title">GPS Information</div>
-    <div class="gps-stats">
-      <div class="gps-stat">
-        <div class="gps-stat-label">Accuracy</div>
-        <div class="gps-stat-value" id="gpsAccuracy">-- m</div>
-      </div>
-      <div class="gps-stat">
-        <div class="gps-stat-label">Updates</div>
-        <div class="gps-stat-value" id="gpsUpdates">0</div>
-      </div>
-      <div class="gps-stat">
-        <div class="gps-stat-label">Latitude</div>
-        <div class="gps-stat-value" id="gpsLat">--</div>
-      </div>
-      <div class="gps-stat">
-        <div class="gps-stat-label">Longitude</div>
-        <div class="gps-stat-value" id="gpsLng">--</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Buttons -->
-  <div class="buttons-section">
-    <button class="btn btn-connect" id="connectBtn" onclick="toggleConnection()">
-      <span>🔗</span>
-      <span id="connectText">Connect Bands</span>
-    </button>
-    <button class="btn btn-simulate" onclick="openSecondWindow()">
-      <span>🔄</span>
-      <span>Test with Second Device</span>
-    </button>
+  <!-- Connected Devices -->
+  <div class="device-list" id="deviceList" style="display: none;">
+    <div class="test-title">CONNECTED DEVICES</div>
+    <div id="devicesContainer"></div>
   </div>
 </div>
 
-<script type="module">
-// ================= GPS PROTOTYPE ENGINE =================
-class KumbhBandGPSPrototype {
-  constructor() {
-    this.myKid = '';
-    this.friendKid = '';
-    this.isConnected = false;
-    this.safeRange = 50;
-    this.currentDistance = 0;
-    this.gpsUpdates = 0;
-    
-    // GPS Data
-    this.myLocation = null;
-    this.friendLocation = null;
-    
-    // Firebase
-    this.db = null;
-    this.unsubscribe = null;
-    this.watchId = null;
-    
-    // DOM Elements
-    this.elements = {
-      myKid: document.getElementById('myKid'),
-      friendKid: document.getElementById('friendKid'),
-      distanceValue: document.getElementById('distanceValue'),
-      distanceCircle: document.getElementById('distanceCircle'),
-      navArrow: document.getElementById('navArrow'),
-      navDirection: document.getElementById('navDirection'),
-      connectionStatus: document.getElementById('connectionStatus'),
-      gpsStatus: document.getElementById('gpsStatus'),
-      gpsAccuracy: document.getElementById('gpsAccuracy'),
-      gpsUpdates: document.getElementById('gpsUpdates'),
-      gpsLat: document.getElementById('gpsLat'),
-      gpsLng: document.getElementById('gpsLng'),
-      safeRangeValue: document.getElementById('safeRangeValue'),
-      safeRangeSlider: document.getElementById('safeRangeSlider'),
-      connectBtn: document.getElementById('connectBtn'),
-      connectText: document.getElementById('connectText'),
-      alertBox: document.getElementById('alertBox')
-    };
-    
-    this.initialize();
-  }
+<script>
+// ================= SIMPLE WORKING PROTOTYPE =================
+// This uses localStorage as a simple "server" to connect devices
 
-  async initialize() {
-    console.log('Initializing Kumbh Band GPS Prototype...');
-    
-    // 1. Generate unique K-ID
+class KumbhBandPrototype {
+  constructor() {
+    // Generate unique K-ID
     this.generateKid();
     
-    // 2. Request GPS permission
-    this.requestGPSPermission();
+    // Initialize state
+    this.safeRange = 50;
+    this.connectedTo = null;
+    this.myLocation = null;
+    this.friendLocation = null;
+    this.updateInterval = null;
+    this.isSimulating = false;
+    this.simulationDistance = 0;
     
-    // 3. Initialize Firebase
-    await this.initializeFirebase();
+    // Load saved settings
+    this.loadSettings();
     
-    // 4. Load saved data
-    this.loadSavedData();
+    // Start updating location
+    this.startLocationUpdates();
     
-    console.log('Prototype ready. Your K-ID:', this.myKid);
+    // Start checking for friend updates
+    this.startFriendUpdates();
+    
+    console.log(`Kumbh Band initialized. Your ID: ${this.myKid}`);
   }
-
-  // ================= K-ID GENERATION =================
+  
   generateKid() {
-    // Check if we already have a K-ID
+    // Try to get existing K-ID
     let savedKid = localStorage.getItem('kumbhBandKid');
     
     if (!savedKid) {
-      // Generate unique K-ID
-      savedKid = 'K-' + this.generateUniqueKid();
+      // Generate new unique K-ID
+      const timestamp = Date.now().toString().slice(-4);
+      const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+      savedKid = `K-${timestamp}${random}`.substring(0, 6);
       localStorage.setItem('kumbhBandKid', savedKid);
-      console.log('Generated new K-ID:', savedKid);
     }
     
     this.myKid = savedKid;
-    this.elements.myKid.textContent = this.myKid;
-  }
-
-  generateUniqueKid() {
-    // Generate 4-digit number (1000-9999)
-    let kidNumber;
-    let attempts = 0;
-    const maxAttempts = 100;
+    document.getElementById('myKid').textContent = this.myKid;
     
-    do {
-      kidNumber = Math.floor(1000 + Math.random() * 9000);
-      attempts++;
+    // Register this band in the system
+    this.updateMyInfo();
+  }
+  
+  loadSettings() {
+    const savedRange = localStorage.getItem('kumbhBandSafeRange');
+    if (savedRange) {
+      this.safeRange = parseInt(savedRange);
+      document.getElementById('safeRangeValue').textContent = this.safeRange;
+      document.getElementById('safeRangeSlider').value = this.safeRange;
+    }
+    
+    const savedFriend = localStorage.getItem('kumbhBandFriend');
+    if (savedFriend) {
+      document.getElementById('friendKid').value = savedFriend;
+    }
+  }
+  
+  startLocationUpdates() {
+    if (navigator.geolocation) {
+      navigator.geolocation.watchPosition(
+        (position) => {
+          this.myLocation = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+            accuracy: position.coords.accuracy,
+            timestamp: Date.now()
+          };
+          
+          // Save to localStorage (simulating server)
+          this.updateMyInfo();
+          
+          // If connected, update distance
+          if (this.connectedTo) {
+            this.updateDistance();
+          }
+        },
+        (error) => {
+          console.log('GPS not available, using simulation');
+          // Use simulated location
+          this.useSimulatedLocation();
+        },
+        { enableHighAccuracy: true, maximumAge: 5000 }
+      );
+    } else {
+      this.useSimulatedLocation();
+    }
+  }
+  
+  useSimulatedLocation() {
+    // Generate a random location in India (near Prayagraj/Kumbh)
+    const baseLat = 25.4358; // Prayagraj latitude
+    const baseLng = 81.8463; // Prayagraj longitude
+    
+    // Add small random offset (within ~1km)
+    const offset = () => (Math.random() - 0.5) * 0.01; // ~1km
+    
+    this.myLocation = {
+      lat: baseLat + offset(),
+      lng: baseLng + offset(),
+      accuracy: 10,
+      timestamp: Date.now()
+    };
+    
+    // Update every 5 seconds
+    setInterval(() => {
+      this.myLocation.lat = baseLat + offset();
+      this.myLocation.lng = baseLng + offset();
+      this.myLocation.timestamp = Date.now();
+      this.updateMyInfo();
       
-      // Check if this K-ID might be in use (simple simulation)
-      const existingKids = JSON.parse(localStorage.getItem('kumbhBandExistingKids') || '[]');
-      
-      if (!existingKids.includes(kidNumber) || attempts >= maxAttempts) {
-        // Add to existing K-IDs
-        existingKids.push(kidNumber);
-        if (existingKids.length > 1000) existingKids.shift(); // Keep list manageable
-        localStorage.setItem('kumbhBandExistingKids', JSON.stringify(existingKids));
-        break;
+      if (this.connectedTo) {
+        this.updateDistance();
       }
-    } while (attempts < maxAttempts);
-    
-    return kidNumber;
+    }, 5000);
   }
-
-  // ================= GPS FUNCTIONS =================
-  requestGPSPermission() {
-    if (!navigator.geolocation) {
-      this.showAlert('GPS is not supported by your device');
+  
+  updateMyInfo() {
+    // Save to localStorage (acting as our simple database)
+    const bandInfo = {
+      kid: this.myKid,
+      location: this.myLocation,
+      connectedTo: this.connectedTo,
+      timestamp: Date.now()
+    };
+    
+    localStorage.setItem(`band_${this.myKid}`, JSON.stringify(bandInfo));
+    
+    // Also store in central list
+    const allBands = JSON.parse(localStorage.getItem('all_kumbh_bands') || '[]');
+    const existingIndex = allBands.findIndex(b => b.kid === this.myKid);
+    
+    if (existingIndex >= 0) {
+      allBands[existingIndex] = bandInfo;
+    } else {
+      allBands.push(bandInfo);
+    }
+    
+    // Keep only recent bands (last 50)
+    if (allBands.length > 50) {
+      allBands.shift();
+    }
+    
+    localStorage.setItem('all_kumbh_bands', JSON.stringify(allBands));
+  }
+  
+  startFriendUpdates() {
+    // Check for friend updates every 2 seconds
+    setInterval(() => {
+      if (this.connectedTo) {
+        this.checkFriendLocation();
+      }
+    }, 2000);
+  }
+  
+  checkFriendLocation() {
+    const friendData = localStorage.getItem(`band_${this.connectedTo}`);
+    
+    if (friendData) {
+      const friendInfo = JSON.parse(friendData);
+      this.friendLocation = friendInfo.location;
+      this.updateDistance();
+    }
+  }
+  
+  connectBand() {
+    const friendId = document.getElementById('friendKid').value.trim().toUpperCase();
+    
+    if (!friendId) {
+      this.showAlert('Please enter a Band ID');
       return;
     }
     
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        this.elements.gpsStatus.textContent = 'Active';
-        this.elements.gpsStatus.style.color = '#22c55e';
-        this.updateGPSDisplay(position);
-      },
-      (error) => {
-        this.elements.gpsStatus.textContent = 'Error';
-        this.elements.gpsStatus.style.color = '#ef4444';
-        this.showAlert('Please enable GPS for prototype testing');
-      },
-      { enableHighAccuracy: true }
-    );
-  }
-
-  startGPSWatch() {
-    if (this.watchId) {
-      navigator.geolocation.clearWatch(this.watchId);
+    if (friendId === this.myKid) {
+      this.showAlert('Cannot connect to your own band');
+      return;
     }
     
-    this.watchId = navigator.geolocation.watchPosition(
-      (position) => {
-        this.myLocation = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-          accuracy: position.coords.accuracy,
-          timestamp: Date.now()
-        };
-        
-        this.updateGPSDisplay(position);
-        this.updateMyLocationOnFirebase();
-      },
-      (error) => {
-        console.error('GPS Error:', error);
-        this.elements.gpsStatus.textContent = 'Error';
-        this.elements.gpsStatus.style.color = '#ef4444';
-      },
-      {
-        enableHighAccuracy: true,
-        maximumAge: 10000,
-        timeout: 15000
-      }
-    );
-  }
-
-  updateGPSDisplay(position) {
-    this.gpsUpdates++;
-    
-    this.elements.gpsAccuracy.textContent = Math.round(position.coords.accuracy) + ' m';
-    this.elements.gpsUpdates.textContent = this.gpsUpdates;
-    this.elements.gpsLat.textContent = position.coords.latitude.toFixed(6);
-    this.elements.gpsLng.textContent = position.coords.longitude.toFixed(6);
-  }
-
-  // ================= FIREBASE FUNCTIONS =================
-  async initializeFirebase() {
-    try {
-      const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js");
-      const { getFirestore } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
-      
-      const firebaseConfig = {
-        apiKey: "AIzaSyDVV1zZZDAnqOkmNXKW0ipJXatUYtjV4W4",
-        authDomain: "kumbh-band-dd624.firebaseapp.com",
-        projectId: "kumbh-band-dd624",
-        storageBucket: "kumbh-band-dd624.appspot.com",
-        messagingSenderId: "153944613096",
-        appId: "1:153944613096:web:0c5fe544c93803c2c01902"
-      };
-      
-      const app = initializeApp(firebaseConfig);
-      this.db = getFirestore(app);
-      console.log('Firebase initialized');
-    } catch (error) {
-      console.error('Firebase initialization failed:', error);
-      this.showAlert('Firebase connection failed. Using simulation mode.');
+    if (!friendId.match(/^K-[A-Z0-9]{4}$/)) {
+      this.showAlert('Invalid Band ID format. Use K-1234');
+      return;
     }
-  }
-
-  async updateMyLocationOnFirebase() {
-    if (!this.isConnected || !this.db || !this.myLocation) return;
     
-    try {
-      const { doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
-      
-      const pairId = [this.myKid, this.friendKid].sort().join('_');
-      const locationRef = doc(this.db, 'bands', pairId);
-      
-      await setDoc(locationRef, {
-        [this.myKid]: {
-          lat: this.myLocation.lat,
-          lng: this.myLocation.lng,
-          accuracy: this.myLocation.accuracy,
-          timestamp: Date.now()
-        }
-      }, { merge: true });
-    } catch (error) {
-      console.error('Firebase update error:', error);
+    // Save friend ID
+    localStorage.setItem('kumbhBandFriend', friendId);
+    this.connectedTo = friendId;
+    
+    // Update my info
+    this.updateMyInfo();
+    
+    // Update UI
+    document.getElementById('statusText').textContent = `Connected to ${friendId}`;
+    document.getElementById('connectBtn').textContent = 'DISCONNECT';
+    document.getElementById('connectBtn').className = 'btn btn-danger';
+    document.getElementById('connectBtn').onclick = () => this.disconnectBand();
+    
+    // Start checking for friend
+    this.checkFriendLocation();
+    
+    this.showAlert(`Connected to ${friendId}`);
+  }
+  
+  disconnectBand() {
+    this.connectedTo = null;
+    
+    // Update UI
+    document.getElementById('statusText').textContent = 'Not connected';
+    document.getElementById('distanceValue').textContent = '--';
+    document.getElementById('distanceCircle').className = 'distance-circle';
+    document.getElementById('connectBtn').textContent = 'CONNECT';
+    document.getElementById('connectBtn').className = 'btn btn-primary';
+    document.getElementById('connectBtn').onclick = () => this.connectBand();
+    
+    // Update my info
+    this.updateMyInfo();
+    
+    this.showAlert('Disconnected');
+  }
+  
+  updateDistance() {
+    if (!this.myLocation || !this.friendLocation) {
+      document.getElementById('distanceValue').textContent = '--';
+      return;
     }
-  }
-
-  async subscribeToFriend() {
-    if (!this.db || !this.friendKid) return;
     
-    try {
-      const { doc, onSnapshot } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
-      
-      const pairId = [this.myKid, this.friendKid].sort().join('_');
-      const pairRef = doc(this.db, 'bands', pairId);
-      
-      this.unsubscribe = onSnapshot(pairRef, (snapshot) => {
-        if (!snapshot.exists()) {
-          this.elements.connectionStatus.textContent = 'Waiting for friend...';
-          return;
-        }
-        
-        const data = snapshot.data();
-        
-        // Find friend's location
-        const friendKey = Object.keys(data).find(key => key !== this.myKid);
-        
-        if (!friendKey || !data[friendKey] || !this.myLocation) {
-          this.elements.connectionStatus.textContent = 'Connecting...';
-          return;
-        }
-        
-        this.friendLocation = data[friendKey];
-        this.elements.connectionStatus.textContent = `Connected to ${friendKey}`;
-        this.elements.connectionStatus.style.color = '#22c55e';
-        this.elements.connectionStatus.classList.add('status-connected');
-        this.elements.connectionStatus.classList.remove('status-disconnected');
-        
-        // Calculate distance
-        this.calculateDistance();
-        
-        // Update direction
-        this.updateDirection();
-      });
-    } catch (error) {
-      console.error('Firebase subscription error:', error);
-      this.showAlert('Connection error. Please try again.');
-    }
-  }
-
-  // ================= DISTANCE & DIRECTION =================
-  calculateDistance() {
-    if (!this.myLocation || !this.friendLocation) return;
-    
-    const distance = this.haversineDistance(
+    // Calculate distance
+    const distance = this.calculateDistance(
       this.myLocation.lat,
       this.myLocation.lng,
       this.friendLocation.lat,
       this.friendLocation.lng
     );
     
-    this.currentDistance = Math.round(distance);
-    this.updateDistanceDisplay();
+    // Add simulation adjustment if active
+    let finalDistance = Math.round(distance);
+    if (this.isSimulating) {
+      finalDistance = Math.max(1, Math.round(distance + this.simulationDistance));
+    }
+    
+    // Update display
+    document.getElementById('distanceValue').textContent = finalDistance;
+    
+    // Update circle color
+    const circle = document.getElementById('distanceCircle');
+    circle.className = 'distance-circle';
+    
+    if (finalDistance <= this.safeRange) {
+      circle.classList.add('safe');
+      document.getElementById('statusText').textContent = `Connected (${finalDistance}m)`;
+    } else if (finalDistance <= this.safeRange * 1.5) {
+      circle.classList.add('warning');
+      document.getElementById('statusText').textContent = `⚠️ Warning: ${finalDistance}m`;
+      this.vibrate();
+    } else {
+      circle.classList.add('danger');
+      document.getElementById('statusText').textContent = `🚨 Danger: ${finalDistance}m!`;
+      this.vibrate(true);
+      circle.classList.add('pulse');
+    }
   }
-
-  haversineDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371e3; // Earth's radius in meters
+  
+  calculateDistance(lat1, lon1, lat2, lon2) {
+    // Haversine formula
+    const R = 6371000; // Earth's radius in meters
     const φ1 = lat1 * Math.PI / 180;
     const φ2 = lat2 * Math.PI / 180;
     const Δφ = (lat2 - lat1) * Math.PI / 180;
     const Δλ = (lon2 - lon1) * Math.PI / 180;
-
+    
     const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
               Math.cos(φ1) * Math.cos(φ2) *
               Math.sin(Δλ/2) * Math.sin(Δλ/2);
@@ -867,181 +663,42 @@ class KumbhBandGPSPrototype {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     return R * c;
   }
-
-  updateDistanceDisplay() {
-    this.elements.distanceValue.textContent = this.currentDistance;
-    
-    // Update circle color based on safe range
-    const circle = this.elements.distanceCircle;
-    circle.className = 'distance-circle';
-    
-    if (this.currentDistance <= this.safeRange) {
-      circle.classList.add('safe');
-    } else if (this.currentDistance <= this.safeRange * 1.5) {
-      circle.classList.add('warning');
-      this.showAlert(`Warning: ${this.currentDistance}m (Safe range: ${this.safeRange}m)`);
-      this.vibrate();
-    } else {
-      circle.classList.add('danger');
-      this.showAlert(`⚠️ DANGER: ${this.currentDistance}m AWAY! Return to safe range.`);
-      this.vibrate(true);
-    }
-  }
-
-  updateDirection() {
-    if (!this.myLocation || !this.friendLocation) return;
-    
-    const bearing = this.calculateBearing(
-      this.myLocation.lat,
-      this.myLocation.lng,
-      this.friendLocation.lat,
-      this.friendLocation.lng
-    );
-    
-    this.elements.navArrow.style.transform = `rotate(${bearing}deg)`;
-    
-    // Set direction text
-    if (bearing >= 315 || bearing < 45) {
-      this.elements.navArrow.textContent = '⬆️';
-      this.elements.navDirection.textContent = 'NORTH';
-    } else if (bearing >= 45 && bearing < 135) {
-      this.elements.navArrow.textContent = '➡️';
-      this.elements.navDirection.textContent = 'EAST';
-    } else if (bearing >= 135 && bearing < 225) {
-      this.elements.navArrow.textContent = '⬇️';
-      this.elements.navDirection.textContent = 'SOUTH';
-    } else {
-      this.elements.navArrow.textContent = '⬅️';
-      this.elements.navDirection.textContent = 'WEST';
-    }
-  }
-
-  calculateBearing(lat1, lon1, lat2, lon2) {
-    const φ1 = lat1 * Math.PI / 180;
-    const φ2 = lat2 * Math.PI / 180;
-    const Δλ = (lon2 - lon1) * Math.PI / 180;
-    
-    const y = Math.sin(Δλ) * Math.cos(φ2);
-    const x = Math.cos(φ1) * Math.sin(φ2) -
-              Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
-    
-    const θ = Math.atan2(y, x);
-    return (θ * 180 / Math.PI + 360) % 360;
-  }
-
-  // ================= CONNECTION MANAGEMENT =================
-  toggleConnection() {
-    if (this.isConnected) {
-      this.disconnect();
-    } else {
-      this.connect();
-    }
-  }
-
-  connect() {
-    this.friendKid = this.elements.friendKid.value.trim().toUpperCase();
-    
-    if (!this.friendKid) {
-      this.showAlert('Please enter your friend\'s K-ID');
+  
+  simulateMovement(change) {
+    if (!this.connectedTo) {
+      this.showAlert('Connect first to simulate movement');
       return;
     }
     
-    if (this.friendKid === this.myKid) {
-      this.showAlert('You cannot connect to your own band');
-      return;
+    this.isSimulating = true;
+    this.simulationDistance += change;
+    
+    document.getElementById('simulationStatus').textContent = 
+      `Simulation: ${this.simulationDistance >= 0 ? '+' : ''}${this.simulationDistance}m`;
+    
+    // Update distance display
+    if (this.myLocation && this.friendLocation) {
+      this.updateDistance();
     }
     
-    if (!this.friendKid.match(/^K-\d{4}$/)) {
-      this.showAlert('Please enter a valid K-ID (format: K-1234)');
-      return;
+    // Show alert for large movements
+    if (Math.abs(change) >= 20) {
+      const direction = change > 0 ? 'farther' : 'closer';
+      this.showAlert(`Simulated moving ${Math.abs(change)}m ${direction}`);
     }
-    
-    // Save friend ID
-    localStorage.setItem('kumbhBandFriendId', this.friendKid);
-    
-    // Start connection
-    this.isConnected = true;
-    this.startGPSWatch();
-    this.subscribeToFriend();
-    
-    // Update UI
-    this.elements.connectText.textContent = 'Disconnect';
-    this.elements.connectBtn.classList.add('connected');
-    this.showAlert(`Connecting to ${this.friendKid}...`);
   }
-
-  disconnect() {
-    // Stop GPS watch
-    if (this.watchId) {
-      navigator.geolocation.clearWatch(this.watchId);
-      this.watchId = null;
-    }
-    
-    // Unsubscribe from Firebase
-    if (this.unsubscribe) {
-      this.unsubscribe();
-      this.unsubscribe = null;
-    }
-    
-    // Reset state
-    this.isConnected = false;
-    this.friendLocation = null;
-    this.currentDistance = 0;
-    
-    // Update UI
-    this.elements.distanceValue.textContent = '--';
-    this.elements.distanceCircle.className = 'distance-circle';
-    this.elements.connectionStatus.textContent = 'Disconnected';
-    this.elements.connectionStatus.style.color = '#ef4444';
-    this.elements.connectionStatus.classList.remove('status-connected');
-    this.elements.connectionStatus.classList.add('status-disconnected');
-    this.elements.connectText.textContent = 'Connect Bands';
-    this.elements.connectBtn.classList.remove('connected');
-    this.elements.navArrow.textContent = '⬆️';
-    this.elements.navArrow.style.transform = 'rotate(0deg)';
-    this.elements.navDirection.textContent = '--';
-    
-    this.showAlert('Disconnected');
-  }
-
-  // ================= UTILITIES =================
+  
   updateSafeRange(value) {
     this.safeRange = parseInt(value);
-    this.elements.safeRangeValue.textContent = this.safeRange;
+    document.getElementById('safeRangeValue').textContent = this.safeRange;
     localStorage.setItem('kumbhBandSafeRange', this.safeRange.toString());
     
-    // Update distance display to reflect new safe range
-    if (this.currentDistance > 0) {
-      this.updateDistanceDisplay();
+    // Update distance display to reflect new range
+    if (this.connectedTo) {
+      this.updateDistance();
     }
   }
-
-  loadSavedData() {
-    // Load safe range
-    const savedRange = localStorage.getItem('kumbhBandSafeRange');
-    if (savedRange) {
-      this.safeRange = parseInt(savedRange);
-      this.elements.safeRangeValue.textContent = this.safeRange;
-      this.elements.safeRangeSlider.value = this.safeRange;
-    }
-    
-    // Load friend ID
-    const savedFriendId = localStorage.getItem('kumbhBandFriendId');
-    if (savedFriendId) {
-      this.elements.friendKid.value = savedFriendId;
-    }
-  }
-
-  showAlert(message) {
-    const alert = this.elements.alertBox;
-    alert.textContent = message;
-    alert.style.display = 'block';
-    
-    setTimeout(() => {
-      alert.style.display = 'none';
-    }, 4000);
-  }
-
+  
   vibrate(strong = false) {
     if (navigator.vibrate) {
       if (strong) {
@@ -1050,42 +707,94 @@ class KumbhBandGPSPrototype {
         navigator.vibrate([100, 50, 100]);
       }
     }
+  }
+  
+  showAlert(message) {
+    const alertBox = document.getElementById('alertBox');
+    alertBox.textContent = message;
+    alertBox.style.display = 'block';
     
-    // Visual feedback
-    document.body.classList.add('vibrating');
     setTimeout(() => {
-      document.body.classList.remove('vibrating');
-    }, 500);
+      alertBox.style.display = 'none';
+    }, 3000);
   }
 }
 
 // ================= GLOBAL FUNCTIONS =================
-window.updateSafeRange = function(value) {
-  prototype.updateSafeRange(value);
-};
+let kumbhBand;
 
-window.toggleConnection = function() {
-  prototype.toggleConnection();
-};
+function updateSafeRange(value) {
+  if (kumbhBand) kumbhBand.updateSafeRange(value);
+}
 
-window.openSecondWindow = function() {
-  const url = window.location.href;
-  window.open(url, '_blank', 'width=500,height=900');
-  prototype.showAlert('Open this same link in another browser/device to test');
-};
+function simulateMovement(change) {
+  if (kumbhBand) kumbhBand.simulateMovement(change);
+}
+
+function connectBand() {
+  if (kumbhBand) kumbhBand.connectBand();
+}
+
+function openTestWindow() {
+  // Open a second window/tab for testing
+  const testWindow = window.open('', '_blank');
+  testWindow.document.write(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Kumbh Band Test Device</title>
+      <style>
+        body { 
+          background: #0f172a; 
+          color: white; 
+          padding: 20px; 
+          font-family: sans-serif; 
+        }
+        .kid { 
+          font-size: 32px; 
+          color: #22c55e; 
+          margin: 20px 0; 
+          font-family: monospace;
+        }
+        .instructions { 
+          background: #1e293b; 
+          padding: 20px; 
+          border-radius: 10px; 
+          margin: 20px 0; 
+        }
+      </style>
+    </head>
+    <body>
+      <h1>Test Device</h1>
+      <div class="instructions">
+        <p>1. Note the K-ID below</p>
+        <p>2. Go back to main window</p>
+        <p>3. Enter this K-ID in friend field</p>
+        <p>4. Click CONNECT</p>
+      </div>
+      <div class="kid">${kumbhBand ? kumbhBand.myKid : 'K-TEST'}</div>
+      <p>Move this device away from main device to see distance increase!</p>
+    </body>
+    </html>
+  `);
+  
+  if (kumbhBand) {
+    kumbhBand.showAlert('Test window opened. Enter the K-ID shown there.');
+  }
+}
 
 // ================= INITIALIZE =================
-let prototype;
-
 document.addEventListener('DOMContentLoaded', () => {
-  prototype = new KumbhBandGPSPrototype();
+  kumbhBand = new KumbhBandPrototype();
   
-  // Add keyboard shortcuts
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !prototype.isConnected) {
-      prototype.connect();
+  // Add Enter key support for connection
+  document.getElementById('friendKid').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      connectBand();
     }
   });
+  
+  console.log('Kumbh Band prototype loaded successfully!');
 });
 </script>
 
