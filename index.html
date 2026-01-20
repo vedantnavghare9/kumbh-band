@@ -2,268 +2,260 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Kumbh Band Prototype</title>
+<title>Kumbh Band - Hardware Simulation</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
+/* ================= HARDWARE-STYLED UI ================= */
+:root {
+  --hardware-green: #22c55e;
+  --hardware-red: #ef4444;
+  --hardware-yellow: #f59e0b;
+  --hardware-blue: #3b82f6;
+  --hardware-bg: #0f172a;
+  --hardware-panel: #1e293b;
+  --hardware-border: #475569;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-  background: radial-gradient(circle at top, #0f172a, #020617);
-  color: #e5e7eb;
-  font-family: system-ui, -apple-system, sans-serif;
-  text-align: center;
-  padding: 20px;
+  background: var(--hardware-bg);
+  color: #e2e8f0;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  line-height: 1.6;
+  padding: 0;
   min-height: 100vh;
 }
 
 .container {
-  max-width: 500px;
+  max-width: 400px;
   margin: 0 auto;
+  padding: 20px;
 }
 
-h2 {
-  font-weight: 700;
-  font-size: 2rem;
-  margin-bottom: 10px;
-  color: #60a5fa;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-}
-
-.subtitle {
-  color: #94a3b8;
+/* Hardware Header */
+.hardware-header {
+  text-align: center;
   margin-bottom: 30px;
-  font-size: 0.9rem;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--hardware-border);
 }
 
-/* Feature Cards */
-.feature-card {
-  background: rgba(30, 41, 59, 0.7);
+.hardware-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--hardware-green);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 10px rgba(34, 197, 94, 0.3);
+}
+
+.hardware-subtitle {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+/* Hardware Status Panel */
+.hardware-status {
+  background: var(--hardware-panel);
+  border: 2px solid var(--hardware-border);
   border-radius: 16px;
   padding: 20px;
-  margin: 20px 0;
-  border-left: 4px solid #22c55e;
-  text-align: left;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-.feature-card.hardware {
-  border-left-color: #8b5cf6;
-}
-
-.feature-card h3 {
-  color: #22c55e;
-  margin-top: 0;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.feature-card.hardware h3 {
-  color: #8b5cf6;
-}
-
-.feature-icon {
-  font-size: 24px;
-}
-
-.feature-desc {
-  color: #cbd5e1;
-  font-size: 14px;
-  line-height: 1.6;
-  margin: 10px 0;
-}
-
-/* Distance Circle */
-.circle-container {
-  position: relative;
-  width: 240px;
-  height: 240px;
-  margin: 20px auto;
-}
-
-.circle {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  border: 12px solid #64748b;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-  position: relative;
-}
-
-.circle.green {
-  border-color: #22c55e;
-  box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
-}
-
-.circle.red {
-  border-color: #ef4444;
-  box-shadow: 0 0 30px rgba(239, 68, 68, 0.3);
-  animation: pulse 1s infinite;
-}
-
-.circle.yellow {
-  border-color: #f59e0b;
-  box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
-}
-
-.distance {
-  font-size: 48px;
-  font-weight: 700;
-  color: #ffffff;
-}
-
-.unit {
-  font-size: 20px;
-  color: #94a3b8;
-  margin-top: 5px;
-}
-
-.gps-accuracy {
-  position: absolute;
-  bottom: -30px;
-  left: 0;
-  right: 0;
-  font-size: 12px;
-  color: #94a3b8;
-}
-
-/* Arrow Navigation */
-.arrow-container {
-  font-size: 60px;
-  margin: 20px 0;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.arrow {
-  transition: transform 0.5s ease;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
-}
-
-/* Status & Controls */
-.status-panel {
-  background: rgba(30, 41, 59, 0.7);
-  padding: 20px;
-  border-radius: 16px;
-  margin: 20px 0;
-}
-
-.status-item {
+.status-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 10px 0;
-  padding: 10px;
-  background: rgba(15, 23, 42, 0.5);
-  border-radius: 10px;
+  margin-bottom: 15px;
 }
 
 .status-label {
   color: #94a3b8;
   font-size: 14px;
+  font-weight: 500;
 }
 
 .status-value {
-  color: #ffffff;
+  font-size: 16px;
   font-weight: 600;
 }
 
-.status-value.safe {
-  color: #22c55e;
+.status-connected {
+  color: var(--hardware-green);
 }
 
-.status-value.warning {
-  color: #f59e0b;
+.status-disconnected {
+  color: var(--hardware-red);
 }
 
-.status-value.danger {
-  color: #ef4444;
+/* Hardware Distance Display */
+.hardware-distance {
+  background: var(--hardware-panel);
+  border: 2px solid var(--hardware-border);
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 25px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-/* Safe Range Controls */
-.range-controls {
-  background: rgba(30, 41, 59, 0.7);
-  padding: 20px;
-  border-radius: 16px;
-  margin: 20px 0;
-}
-
-.range-slider {
-  width: 100%;
-  margin: 20px 0;
-  -webkit-appearance: none;
-  height: 8px;
-  border-radius: 4px;
-  background: #475569;
-  outline: none;
-}
-
-.range-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 24px;
-  height: 24px;
+.distance-circle {
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
-  background: #22c55e;
-  cursor: pointer;
-  border: 3px solid #ffffff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  border: 8px solid var(--hardware-border);
+  margin: 0 auto 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-.range-display {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.distance-circle::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.distance-circle.safe {
+  border-color: var(--hardware-green);
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
+}
+
+.distance-circle.safe::before {
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.1) 0%, transparent 70%);
+  opacity: 1;
+}
+
+.distance-circle.warning {
+  border-color: var(--hardware-yellow);
+  box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
+}
+
+.distance-circle.warning::before {
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.1) 0%, transparent 70%);
+  opacity: 1;
+}
+
+.distance-circle.danger {
+  border-color: var(--hardware-red);
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.3);
+  animation: hardwarePulse 1s infinite;
+}
+
+.distance-circle.danger::before {
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.1) 0%, transparent 70%);
+  opacity: 1;
+}
+
+.distance-value {
+  font-size: 48px;
+  font-weight: 800;
+  color: white;
+  line-height: 1;
+  margin-bottom: 5px;
+}
+
+.distance-unit {
+  font-size: 18px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.distance-label {
+  font-size: 14px;
+  color: #94a3b8;
   margin-top: 15px;
 }
 
-.range-value {
-  font-size: 24px;
-  font-weight: 700;
-  color: #22c55e;
+/* Hardware Navigation */
+.hardware-navigation {
+  background: var(--hardware-panel);
+  border: 2px solid var(--hardware-border);
+  border-radius: 16px;
+  padding: 25px;
+  margin-bottom: 25px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-.range-text {
+.nav-title {
   color: #94a3b8;
   font-size: 14px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-/* Connection Panel */
-.connection-panel {
-  background: rgba(30, 41, 59, 0.7);
-  padding: 20px;
+.nav-arrow {
+  font-size: 80px;
+  margin: 15px 0;
+  transition: transform 0.5s ease;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+}
+
+.nav-direction {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--hardware-blue);
+  margin-top: 10px;
+}
+
+/* Hardware Connection Panel */
+.hardware-connection {
+  background: var(--hardware-panel);
+  border: 2px solid var(--hardware-border);
   border-radius: 16px;
-  margin: 20px 0;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .kid-display {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin: 15px 0;
+  background: rgba(15, 23, 42, 0.7);
+  border: 2px solid var(--hardware-border);
+  border-radius: 12px;
   padding: 15px;
-  background: rgba(15, 23, 42, 0.5);
-  border-radius: 10px;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .kid-label {
   color: #94a3b8;
-  font-size: 14px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
 }
 
 .kid-value {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 800;
-  color: #22c55e;
+  color: var(--hardware-green);
   font-family: monospace;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
 }
 
-.input-group {
+.connection-input {
   margin: 20px 0;
 }
 
@@ -272,179 +264,316 @@ h2 {
   color: #94a3b8;
   font-size: 14px;
   margin-bottom: 10px;
-  text-align: left;
+  font-weight: 500;
 }
 
-input {
-  padding: 14px;
-  border-radius: 12px;
-  border: 2px solid #475569;
+.hardware-input {
   width: 100%;
-  background: #0f172a;
-  color: #ffffff;
+  padding: 15px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 2px solid var(--hardware-border);
+  border-radius: 12px;
+  color: white;
   font-size: 16px;
-  transition: border-color 0.3s;
-  box-sizing: border-box;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.3s;
 }
 
-input:focus {
+.hardware-input:focus {
   outline: none;
-  border-color: #60a5fa;
+  border-color: var(--hardware-blue);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
-/* Buttons */
-.button-section {
-  margin: 30px 0;
+/* Hardware Controls */
+.hardware-controls {
+  background: var(--hardware-panel);
+  border: 2px solid var(--hardware-border);
+  border-radius: 16px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.safe-range-control {
+  margin-bottom: 25px;
+}
+
+.range-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.range-label {
+  color: #94a3b8;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.range-value-display {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--hardware-green);
+}
+
+.hardware-slider {
+  width: 100%;
+  height: 8px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: var(--hardware-border);
+  border-radius: 4px;
+  outline: none;
+}
+
+.hardware-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--hardware-green);
+  border: 3px solid white;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.range-limits {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  color: #94a3b8;
+  font-size: 12px;
+}
+
+/* Hardware Buttons */
+.hardware-buttons {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-button {
-  padding: 16px 32px;
-  border-radius: 25px;
+.hardware-btn {
+  padding: 18px;
   border: none;
+  border-radius: 12px;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   cursor: pointer;
   transition: all 0.3s;
-  letter-spacing: 1px;
-  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
-.connect-btn {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
+.btn-connect {
+  background: linear-gradient(135deg, var(--hardware-green), #16a34a);
   color: white;
   box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
 }
 
-.connect-btn:hover {
+.btn-connect:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
 }
 
-.connect-btn.connected {
-  background: linear-gradient(135deg, #ef4444, #dc2626);
+.btn-connect.connected {
+  background: linear-gradient(135deg, var(--hardware-red), #dc2626);
   box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
 }
 
-.simulate-btn {
-  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+.btn-simulate {
+  background: linear-gradient(135deg, var(--hardware-blue), #2563eb);
   color: white;
-  margin-top: 10px;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
 }
 
-.simulate-btn:hover {
+.btn-simulate:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
 }
 
-/* Simulation Controls */
-.simulation-controls {
-  background: rgba(30, 41, 59, 0.7);
-  padding: 20px;
+/* Hardware Simulation */
+.hardware-simulation {
+  background: var(--hardware-panel);
+  border: 2px solid var(--hardware-border);
   border-radius: 16px;
-  margin: 20px 0;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-.sim-controls-grid {
+.sim-title {
+  color: #94a3b8;
+  font-size: 14px;
+  margin-bottom: 20px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.sim-controls {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin-top: 15px;
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
-.sim-control-btn {
-  padding: 12px;
-  background: #475569;
-  border: none;
-  border-radius: 10px;
+.sim-btn {
+  padding: 15px;
+  background: var(--hardware-panel);
+  border: 2px solid var(--hardware-border);
+  border-radius: 12px;
   color: white;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 }
 
-.sim-control-btn:hover {
-  background: #64748b;
+.sim-btn:hover {
+  background: var(--hardware-border);
   transform: translateY(-2px);
 }
 
-/* Footer */
-.footer {
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px solid #334155;
+.sim-icon {
+  font-size: 24px;
+}
+
+.sim-label {
   font-size: 12px;
-  color: #64748b;
-  line-height: 1.6;
+  color: #94a3b8;
 }
 
-.insight-box {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+.sim-status {
+  text-align: center;
+  padding: 15px;
+  background: rgba(15, 23, 42, 0.7);
+  border-radius: 12px;
+  border: 2px solid var(--hardware-border);
+}
+
+.sim-status-value {
+  color: var(--hardware-blue);
+  font-weight: 700;
+  font-size: 18px;
+}
+
+/* Hardware Footer */
+.hardware-footer {
+  background: var(--hardware-panel);
+  border: 2px solid var(--hardware-border);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.footer-title {
+  color: var(--hardware-green);
+  font-size: 16px;
+  margin-bottom: 15px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.hardware-features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.feature-item {
+  background: rgba(15, 23, 42, 0.7);
   border-radius: 10px;
   padding: 15px;
-  margin: 15px 0;
-  text-align: left;
+  text-align: center;
 }
 
-.insight-title {
-  color: #ef4444;
-  font-weight: 600;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.feature-icon {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: var(--hardware-green);
 }
 
-.hardware-note {
-  background: rgba(34, 197, 94, 0.1);
-  border: 1px solid rgba(34, 197, 94, 0.3);
-  border-radius: 10px;
-  padding: 15px;
-  margin: 15px 0;
-  text-align: left;
+.feature-text {
+  font-size: 12px;
+  color: #94a3b8;
+  line-height: 1.4;
 }
 
-.hardware-title {
-  color: #22c55e;
-  font-weight: 600;
-  margin-bottom: 8px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+/* Hardware Alert */
+.hardware-alert {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--hardware-red);
+  color: white;
+  padding: 15px 25px;
+  border-radius: 12px;
+  font-weight: 700;
+  box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
+  display: none;
+  z-index: 1000;
+  animation: slideDown 0.3s ease;
 }
 
 /* Animations */
-@keyframes pulse {
+@keyframes hardwarePulse {
   0% { opacity: 1; }
   50% { opacity: 0.7; }
   100% { opacity: 1; }
 }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
+@keyframes slideDown {
+  from { transform: translateX(-50%) translateY(-20px); opacity: 0; }
+  to { transform: translateX(-50%) translateY(0); opacity: 1; }
 }
 
-.vibrate {
-  animation: shake 0.5s ease-in-out;
+@keyframes vibrate {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+.vibrating {
+  animation: vibrate 0.1s linear infinite;
 }
 
 /* Responsive */
-@media (max-width: 480px) {
-  .circle-container {
-    width: 200px;
-    height: 200px;
+@media (max-width: 400px) {
+  .container {
+    padding: 15px;
   }
   
-  .distance {
+  .hardware-title {
+    font-size: 1.8rem;
+  }
+  
+  .distance-circle {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .distance-value {
     font-size: 40px;
   }
   
-  .sim-controls-grid {
+  .sim-controls {
+    grid-template-columns: 1fr;
+  }
+  
+  .hardware-features {
     grid-template-columns: 1fr;
   }
 }
@@ -453,664 +582,545 @@ button {
 
 <body>
 
+<!-- Alert Notification -->
+<div class="hardware-alert" id="hardwareAlert">
+  ⚠️ OUT OF SAFE RANGE! Move closer!
+</div>
+
 <div class="container">
-  <h2>KUMBH BAND PROTOTYPE</h2>
-  <div class="subtitle">Testing GPS-based distance tracking (For demo only)</div>
+  <!-- Hardware Header -->
+  <div class="hardware-header">
+    <h1 class="hardware-title">KUMBH BAND</h1>
+    <p class="hardware-subtitle">Hardware Simulation Prototype</p>
+  </div>
 
-  <!-- Feature Explanation -->
-  <div class="feature-card">
-    <h3><span class="feature-icon">📡</span> PROTOTYPE PURPOSE</h3>
-    <div class="feature-desc">
-      This web prototype uses GPS to demonstrate distance tracking logic. 
-      It intentionally shows GPS limitations (fluctuations, inaccuracies) 
-      to validate why Bluetooth is better for the actual hardware.
+  <!-- Hardware Status -->
+  <div class="hardware-status">
+    <div class="status-row">
+      <span class="status-label">Device Status</span>
+      <span class="status-value status-disconnected" id="deviceStatus">DISCONNECTED</span>
+    </div>
+    <div class="status-row">
+      <span class="status-label">Battery</span>
+      <span class="status-value">98%</span>
+    </div>
+    <div class="status-row">
+      <span class="status-label">BLE Signal</span>
+      <span class="status-value">--</span>
     </div>
   </div>
 
-  <!-- 1. DISTANCE METER -->
-  <div class="feature-card">
-    <h3><span class="feature-icon">📏</span> 1. DISTANCE METER</h3>
-    <div class="feature-desc">
-      Shows real-time distance between connected users using GPS coordinates.
-      <strong>Observe the fluctuations</strong> - this demonstrates why GPS isn't ideal for the hardware.
+  <!-- Hardware Distance Display -->
+  <div class="hardware-distance">
+    <div class="distance-circle" id="distanceCircle">
+      <div class="distance-value" id="distanceValue">--</div>
+      <div class="distance-unit">meters</div>
+    </div>
+    <div class="distance-label">
+      Distance from connected band
     </div>
   </div>
 
-  <div class="circle-container">
-    <div class="circle" id="circle">
-      <div class="distance" id="distance">--</div>
-      <div class="unit">meters</div>
-    </div>
-    <div class="gps-accuracy" id="gpsAccuracy">GPS accuracy: --</div>
+  <!-- Hardware Navigation -->
+  <div class="hardware-navigation">
+    <div class="nav-title">Direction to Friend</div>
+    <div class="nav-arrow" id="navArrow">⬆️</div>
+    <div class="nav-direction" id="navDirection">--</div>
   </div>
 
-  <!-- 2. NAVIGATION ARROW -->
-  <div class="feature-card">
-    <h3><span class="feature-icon">🧭</span> 2. DIRECTION INDICATOR</h3>
-    <div class="feature-desc">
-      Arrow points toward the other user. Uses compass + GPS bearing.
-      <strong>Note the instability</strong> - hardware will use simpler LED guidance.
-    </div>
-  </div>
-
-  <div class="arrow-container">
-    <div class="arrow" id="arrow">⬆️</div>
-  </div>
-
-  <!-- Status Panel -->
-  <div class="status-panel">
-    <div class="status-item">
-      <span class="status-label">Connection Status</span>
-      <span class="status-value" id="statusText">Disconnected</span>
-    </div>
-    <div class="status-item">
-      <span class="status-label">Safe Range Status</span>
-      <span class="status-value safe" id="rangeStatus">IN RANGE</span>
-    </div>
-    <div class="status-item">
-      <span class="status-label">GPS Updates</span>
-      <span class="status-value" id="gpsUpdates">0</span>
-    </div>
-  </div>
-
-  <!-- 3. SAFE RANGE CONTROL -->
-  <div class="feature-card">
-    <h3><span class="feature-icon">🛡️</span> 3. SAFE RANGE</h3>
-    <div class="feature-desc">
-      Defines maximum allowed separation distance. When exceeded, visual alerts activate.
-      Hardware will add vibration alerts.
-    </div>
-  </div>
-
-  <div class="range-controls">
-    <div class="range-text">Adjust safe distance threshold:</div>
-    <input type="range" min="10" max="100" value="50" class="range-slider" id="rangeSlider" oninput="updateRange(this.value)">
-    <div class="range-display">
-      <span class="range-text">Safe Range:</span>
-      <span class="range-value" id="rangeValue">50</span>
-      <span class="range-text">meters</span>
-    </div>
-  </div>
-
-  <!-- 4. CONNECTION LOGIC -->
-  <div class="feature-card">
-    <h3><span class="feature-icon">🔗</span> 4. CONNECTION SYSTEM</h3>
-    <div class="feature-desc">
-      Each user gets a unique K-ID. Enter friend's K-ID to connect.
-      Hardware bands will auto-connect via Bluetooth.
-    </div>
-  </div>
-
-  <div class="connection-panel">
+  <!-- Hardware Connection -->
+  <div class="hardware-connection">
     <div class="kid-display">
-      <span class="kid-label">YOUR K-ID</span>
-      <span class="kid-value" id="myKid">K-0000</span>
+      <div class="kid-label">Your Band ID</div>
+      <div class="kid-value" id="myKid">K-0000</div>
     </div>
     
-    <div class="input-group">
-      <label class="input-label">ENTER FRIEND'S K-ID:</label>
-      <input type="text" id="friendKid" placeholder="e.g., K-1234" maxlength="6">
+    <div class="connection-input">
+      <label class="input-label">Enter Friend's Band ID</label>
+      <input type="text" class="hardware-input" id="friendKid" placeholder="e.g., K-1234" maxlength="6">
     </div>
     
-    <div class="button-section">
-      <button class="connect-btn" id="connectBtn" onclick="toggleConnection()">CONNECT</button>
-      <button class="simulate-btn" onclick="startSimulation()">START SIMULATION MODE</button>
+    <div class="hardware-buttons">
+      <button class="hardware-btn btn-connect" id="connectBtn" onclick="toggleConnection()">
+        <span>🔗</span>
+        <span id="connectText">CONNECT BAND</span>
+      </button>
+      <button class="hardware-btn btn-simulate" onclick="startSimulationMode()">
+        <span>🎮</span>
+        <span>SIMULATION MODE</span>
+      </button>
     </div>
   </div>
 
-  <!-- Simulation Controls -->
-  <div class="simulation-controls">
-    <div class="feature-desc">
-      <strong>Test distance changes:</strong> Simulate moving closer or farther apart.
-      Use this to see how the system responds to distance changes.
+  <!-- Hardware Controls -->
+  <div class="hardware-controls">
+    <div class="safe-range-control">
+      <div class="range-header">
+        <span class="range-label">Safe Range</span>
+        <span class="range-value-display" id="safeRangeValue">50</span>
+      </div>
+      <input type="range" min="10" max="100" value="50" class="hardware-slider" id="safeRangeSlider" 
+             oninput="updateSafeRange(this.value)">
+      <div class="range-limits">
+        <span>10m</span>
+        <span>100m</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hardware Simulation -->
+  <div class="hardware-simulation">
+    <div class="sim-title">Test Band Movement</div>
+    
+    <div class="sim-controls">
+      <button class="sim-btn" onclick="simulateMovement(-5)">
+        <span class="sim-icon">⬇️</span>
+        <span class="sim-label">5m Closer</span>
+      </button>
+      <button class="sim-btn" onclick="simulateMovement(5)">
+        <span class="sim-icon">⬆️</span>
+        <span class="sim-label">5m Away</span>
+      </button>
+      <button class="sim-btn" onclick="simulateMovement(-20)">
+        <span class="sim-icon">⏬</span>
+        <span class="sim-label">20m Closer</span>
+      </button>
+      <button class="sim-btn" onclick="simulateMovement(20)">
+        <span class="sim-icon">⏫</span>
+        <span class="sim-label">20m Away</span>
+      </button>
     </div>
     
-    <div class="sim-controls-grid">
-      <button class="sim-control-btn" onclick="simulateDistance(-5)">Move 5m Closer</button>
-      <button class="sim-control-btn" onclick="simulateDistance(5)">Move 5m Away</button>
-      <button class="sim-control-btn" onclick="simulateDistance(-20)">Move 20m Closer</button>
-      <button class="sim-control-btn" onclick="simulateDistance(20)">Move 20m Away</button>
-    </div>
-    
-    <div class="status-item" style="margin-top: 15px;">
-      <span class="status-label">Simulated Adjustment</span>
-      <span class="status-value" id="simAdjustment">0m</span>
+    <div class="sim-status">
+      <div class="sim-label">Simulation Adjustment</div>
+      <div class="sim-status-value" id="simAdjustment">0m</div>
     </div>
   </div>
 
-  <!-- Hardware vs Prototype Insights -->
-  <div class="insight-box">
-    <div class="insight-title">⚠️ GPS LIMITATIONS OBSERVED</div>
-    <div class="feature-desc">
-      <strong>This prototype shows why we're NOT using GPS in hardware:</strong><br>
-      • Distance fluctuates even when devices are stationary<br>
-      • Poor accuracy indoors/urban areas<br>
-      • High battery consumption<br>
-      • Requires internet connection<br>
-      <br>
-      <strong>Hardware solution:</strong> Bluetooth LE for stable, low-power proximity detection.
+  <!-- Hardware Footer -->
+  <div class="hardware-footer">
+    <div class="footer-title">KUMBH BAND FEATURES</div>
+    <div class="hardware-features">
+      <div class="feature-item">
+        <div class="feature-icon">📏</div>
+        <div class="feature-text">Real-time distance between connected bands</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🛡️</div>
+        <div class="feature-text">Safe range alerts with vibration</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🧭</div>
+        <div class="feature-text">Direction guidance to find friends</div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🔋</div>
+        <div class="feature-text">7+ days battery life (BLE technology)</div>
+      </div>
     </div>
-  </div>
-
-  <div class="hardware-note">
-    <div class="hardware-title">✅ HARDWARE ADVANTAGES</div>
-    <div class="feature-desc">
-      <strong>The actual Kumbh Band will:</strong><br>
-      • Use Bluetooth LE (stable, low power)<br>
-      • Have simple LED indicators (no complex arrows)<br>
-      • Include vibration alerts<br>
-      • Auto-connect without manual pairing<br>
-      • Work without internet or GPS<br>
-      • Last 7+ days on single charge
-    </div>
-  </div>
-
-  <div class="footer">
-    <strong>Prototype Goals Achieved:</strong><br>
-    1. ✓ Validated distance calculation logic<br>
-    2. ✓ Demonstrated real-time tracking concepts<br>
-    3. ✓ Identified GPS limitations for dense crowds<br>
-    4. ✓ Established need for Bluetooth-based hardware<br>
-    5. ✓ Tested user feedback mechanisms<br>
-    <br>
-    <em>This prototype served its purpose - proving what NOT to build.</em>
   </div>
 </div>
 
 <script type="module">
-// ================= FIREBASE CONFIGURATION =================
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDVV1zZZDAnqOkmNXKW0ipJXatUYtjV4W4",
-  authDomain: "kumbh-band-dd624.firebaseapp.com",
-  projectId: "kumbh-band-dd624",
-  storageBucket: "kumbh-band-dd624.appspot.com",
-  messagingSenderId: "153944613096",
-  appId: "1:153944613096:web:0c5fe544c93803c2c01902"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-// ================= GLOBAL STATE =================
-let safeRange = 50;
-let isConnected = false;
-let isSimulationMode = false;
-let geoWatchId = null;
-let unsubscribeSnapshot = null;
-let myId = null;
-let friendId = null;
-let distanceHistory = [];
-let gpsUpdateCount = 0;
-let simulatedAdjustment = 0;
-let lastDistance = 0;
-
-// ================= DOM ELEMENTS =================
-const elements = {
-  distance: document.getElementById('distance'),
-  circle: document.getElementById('circle'),
-  statusText: document.getElementById('statusText'),
-  arrow: document.getElementById('arrow'),
-  myKid: document.getElementById('myKid'),
-  friendKid: document.getElementById('friendKid'),
-  rangeValue: document.getElementById('rangeValue'),
-  rangeSlider: document.getElementById('rangeSlider'),
-  connectBtn: document.getElementById('connectBtn'),
-  rangeStatus: document.getElementById('rangeStatus'),
-  gpsAccuracy: document.getElementById('gpsAccuracy'),
-  gpsUpdates: document.getElementById('gpsUpdates'),
-  simAdjustment: document.getElementById('simAdjustment')
-};
-
-// ================= INITIALIZATION =================
-function initializeAppState() {
-  // Generate or load K-ID
-  myId = localStorage.getItem('kumbhBandKid');
-  if (!myId) {
-    myId = 'K-' + Math.floor(1000 + Math.random() * 9000);
-    localStorage.setItem('kumbhBandKid', myId);
-  }
-  
-  // Display K-ID
-  elements.myKid.textContent = myId;
-  
-  // Load saved safe range
-  const savedRange = localStorage.getItem('kumbhBandSafeRange');
-  if (savedRange) {
-    safeRange = parseInt(savedRange);
-    elements.rangeValue.textContent = safeRange;
-    elements.rangeSlider.value = safeRange;
-  }
-  
-  // Load saved friend ID
-  const savedFriendId = localStorage.getItem('kumbhBandFriendId');
-  if (savedFriendId) {
-    elements.friendKid.value = savedFriendId;
-  }
-}
-
-// ================= SAFE RANGE CONTROL =================
-function updateRange(value) {
-  safeRange = parseInt(value);
-  elements.rangeValue.textContent = safeRange;
-  localStorage.setItem('kumbhBandSafeRange', safeRange.toString());
-  
-  // Update UI based on current distance
-  if (lastDistance > 0) {
-    updateSafetyStatus(lastDistance);
-  }
-}
-
-// ================= SIMULATION CONTROLS =================
-window.simulateDistance = function(change) {
-  if (!isConnected) {
-    alert('Please connect first to simulate movement');
-    return;
-  }
-  
-  simulatedAdjustment += change;
-  elements.simAdjustment.textContent = simulatedAdjustment + 'm';
-  
-  if (isSimulationMode) {
-    // In simulation mode, directly adjust the displayed distance
-    const newDistance = Math.max(1, lastDistance + change);
-    updateDistanceDisplay(newDistance);
-  } else {
-    // In real mode, simulate by adjusting GPS coordinates
-    simulateGPSTracking(change);
-  }
-};
-
-// ================= CONNECTION MANAGEMENT =================
-window.toggleConnection = function() {
-  if (isConnected) {
-    disconnect();
-  } else {
-    connect();
-  }
-};
-
-window.startSimulation = function() {
-  if (isConnected) {
-    disconnect();
-  }
-  
-  // Set simulation mode
-  isSimulationMode = true;
-  friendId = 'K-SIM';
-  elements.friendKid.value = friendId;
-  
-  // Start simulation
-  connect();
-};
-
-function connect() {
-  friendId = elements.friendKid.value.trim().toUpperCase();
-  
-  if (!friendId) {
-    alert('Please enter a friend K-ID or use Simulation Mode');
-    return;
-  }
-  
-  if (friendId === myId) {
-    alert('You cannot connect to yourself');
-    return;
-  }
-  
-  // Validate K-ID format (K-1234 or K-SIM)
-  if (!friendId.match(/^K-(SIM|\d{4})$/)) {
-    alert('Please enter a valid K-ID (format: K-1234) or use K-SIM for simulation');
-    return;
-  }
-  
-  // Check if simulation mode
-  isSimulationMode = friendId === 'K-SIM';
-  
-  if (isSimulationMode) {
-    startSimulationMode();
-  } else {
-    startRealConnection();
-  }
-  
-  // Update UI
-  updateConnectionUI();
-}
-
-function startSimulationMode() {
-  // Simulation mode - no real GPS, just simulated data
-  elements.statusText.textContent = 'Connected (Simulation)';
-  elements.statusText.className = 'status-value';
-  
-  // Start with random distance
-  lastDistance = 20 + Math.random() * 30;
-  updateDistanceDisplay(lastDistance);
-  
-  // Simulate GPS fluctuations
-  simulationInterval = setInterval(() => {
-    // Add random GPS fluctuation
-    const fluctuation = (Math.random() - 0.5) * 10;
-    const newDistance = Math.max(1, lastDistance + fluctuation);
-    updateDistanceDisplay(newDistance);
+// ================= HARDWARE SIMULATION ENGINE =================
+class KumbhBandSimulator {
+  constructor() {
+    // Hardware State
+    this.isConnected = false;
+    this.isSimulationMode = false;
+    this.safeRange = 50;
+    this.currentDistance = 0;
+    this.simulatedAdjustment = 0;
+    this.myKid = '';
+    this.friendKid = '';
     
-    // Update GPS accuracy display
-    elements.gpsAccuracy.textContent = `GPS accuracy: ±${(5 + Math.random() * 10).toFixed(1)}m`;
-    gpsUpdateCount++;
-    elements.gpsUpdates.textContent = gpsUpdateCount;
-  }, 2000);
-  
-  // Simulate arrow movement
-  directionInterval = setInterval(() => {
-    const randomBearing = Math.random() * 360;
-    elements.arrow.style.transform = `rotate(${randomBearing}deg)`;
-  }, 3000);
-}
-
-function startRealConnection() {
-  // Real connection mode - use actual GPS
-  if (!navigator.geolocation) {
-    alert('Geolocation is not supported by your browser');
-    return;
+    // Hardware Settings
+    this.batteryLevel = 98;
+    this.bleSignalStrength = 0;
+    
+    // DOM Elements
+    this.elements = {
+      distanceValue: document.getElementById('distanceValue'),
+      distanceCircle: document.getElementById('distanceCircle'),
+      deviceStatus: document.getElementById('deviceStatus'),
+      navArrow: document.getElementById('navArrow'),
+      navDirection: document.getElementById('navDirection'),
+      myKid: document.getElementById('myKid'),
+      friendKid: document.getElementById('friendKid'),
+      safeRangeValue: document.getElementById('safeRangeValue'),
+      safeRangeSlider: document.getElementById('safeRangeSlider'),
+      connectBtn: document.getElementById('connectBtn'),
+      connectText: document.getElementById('connectText'),
+      simAdjustment: document.getElementById('simAdjustment'),
+      hardwareAlert: document.getElementById('hardwareAlert')
+    };
+    
+    // Hardware Simulation
+    this.simulationInterval = null;
+    this.directionInterval = null;
+    this.vibrationTimeout = null;
+    
+    // Initialize
+    this.initializeHardware();
   }
   
-  elements.statusText.textContent = 'Getting location...';
-  
-  // Start watching position
-  geoWatchId = navigator.geolocation.watchPosition(
-    handlePositionUpdate,
-    handlePositionError,
-    {
-      enableHighAccuracy: true,
-      maximumAge: 10000,
-      timeout: 15000
+  // ================= HARDWARE INITIALIZATION =================
+  initializeHardware() {
+    // Generate or load K-ID
+    this.myKid = localStorage.getItem('kumbhBandKid');
+    if (!this.myKid) {
+      this.myKid = 'K-' + Math.floor(1000 + Math.random() * 9000);
+      localStorage.setItem('kumbhBandKid', this.myKid);
     }
-  );
-  
-  // Subscribe to friend's location
-  subscribeToFriend();
-}
-
-function handlePositionUpdate(position) {
-  if (!isConnected) return;
-  
-  const { latitude, longitude, accuracy } = position.coords;
-  
-  // Update GPS stats
-  elements.gpsAccuracy.textContent = `GPS accuracy: ±${Math.round(accuracy)}m`;
-  gpsUpdateCount++;
-  elements.gpsUpdates.textContent = gpsUpdateCount;
-  
-  // Save location to Firebase
-  const pairId = [myId, friendId].sort().join('_');
-  const locationRef = doc(db, 'bands', pairId);
-  
-  setDoc(locationRef, {
-    [myId]: {
-      lat: latitude,
-      lng: longitude,
-      accuracy: accuracy,
-      timestamp: Date.now()
+    
+    // Display K-ID on band
+    this.elements.myKid.textContent = this.myKid;
+    
+    // Load saved safe range
+    const savedRange = localStorage.getItem('kumbhBandSafeRange');
+    if (savedRange) {
+      this.safeRange = parseInt(savedRange);
+      this.elements.safeRangeValue.textContent = this.safeRange;
+      this.elements.safeRangeSlider.value = this.safeRange;
     }
-  }, { merge: true });
-}
-
-function handlePositionError(error) {
-  console.error('Geolocation error:', error);
-  elements.statusText.textContent = 'Location error';
-  elements.statusText.className = 'status-value danger';
-}
-
-function subscribeToFriend() {
-  const pairId = [myId, friendId].sort().join('_');
-  const pairRef = doc(db, 'bands', pairId);
+    
+    // Load saved friend ID
+    const savedFriendId = localStorage.getItem('kumbhBandFriendId');
+    if (savedFriendId) {
+      this.elements.friendKid.value = savedFriendId;
+    }
+    
+    // Update UI
+    this.updateHardwareDisplay();
+    
+    // Add event listeners
+    this.elements.friendKid.addEventListener('input', (e) => {
+      localStorage.setItem('kumbhBandFriendId', e.target.value);
+    });
+    
+    // Hardware button sounds simulation
+    document.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        this.simulateButtonClick();
+      });
+    });
+    
+    console.log('Kumbh Band Hardware Simulator Initialized');
+  }
   
-  unsubscribeSnapshot = onSnapshot(pairRef, (snapshot) => {
-    if (!isConnected || !snapshot.exists()) return;
+  // ================= HARDWARE CONTROLS =================
+  updateSafeRange(value) {
+    this.safeRange = parseInt(value);
+    this.elements.safeRangeValue.textContent = this.safeRange;
+    localStorage.setItem('kumbhBandSafeRange', this.safeRange.toString());
     
-    const data = snapshot.data();
+    // Check current distance against new safe range
+    if (this.currentDistance > 0) {
+      this.checkSafeRange(this.currentDistance);
+    }
+  }
+  
+  toggleConnection() {
+    if (this.isConnected) {
+      this.disconnectBand();
+    } else {
+      this.connectBand();
+    }
+  }
+  
+  connectBand() {
+    this.friendKid = this.elements.friendKid.value.trim().toUpperCase();
     
-    // Find friend's location
-    const friendKey = Object.keys(data).find(key => key !== myId);
-    
-    if (!friendKey || !data[friendKey] || !data[myId]) {
-      elements.statusText.textContent = 'Waiting for friend...';
+    if (!this.friendKid) {
+      this.showAlert('Enter a Band ID to connect');
       return;
     }
     
-    elements.statusText.textContent = `Connected to ${friendKey}`;
-    elements.statusText.className = 'status-value safe';
+    if (this.friendKid === this.myKid) {
+      this.showAlert('Cannot connect to your own band');
+      return;
+    }
     
-    // Calculate distance
-    const myLocation = data[myId];
-    const friendLocation = data[friendKey];
+    // Validate K-ID format
+    if (!this.friendKid.match(/^K-(SIM|\d{4})$/)) {
+      this.showAlert('Invalid Band ID format. Use K-1234 or K-SIM');
+      return;
+    }
     
-    const distance = calculateDistance(
-      myLocation.lat,
-      myLocation.lng,
-      friendLocation.lat,
-      friendLocation.lng
-    );
+    // Check if simulation mode
+    this.isSimulationMode = this.friendKid === 'K-SIM';
     
-    // Add simulated adjustment if any
-    const adjustedDistance = Math.max(1, distance + simulatedAdjustment);
-    
-    // Smooth the distance
-    const smoothedDistance = smoothDistance(adjustedDistance);
-    
-    // Update display
-    updateDistanceDisplay(smoothedDistance);
-    
-    // Calculate and update direction
-    if (isSimulationMode) {
-      // Random bearing for simulation
-      const bearing = Math.random() * 360;
-      elements.arrow.style.transform = `rotate(${bearing}deg)`;
+    if (this.isSimulationMode) {
+      this.startSimulationMode();
     } else {
-      const bearing = calculateBearing(
-        myLocation.lat,
-        myLocation.lng,
-        friendLocation.lat,
-        friendLocation.lng
-      );
-      elements.arrow.style.transform = `rotate(${bearing}deg)`;
-    }
-  });
-}
-
-function disconnect() {
-  // Stop geolocation
-  if (geoWatchId !== null) {
-    navigator.geolocation.clearWatch(geoWatchId);
-    geoWatchId = null;
-  }
-  
-  // Unsubscribe from Firebase
-  if (unsubscribeSnapshot) {
-    unsubscribeSnapshot();
-    unsubscribeSnapshot = null;
-  }
-  
-  // Stop simulation intervals
-  if (simulationInterval) {
-    clearInterval(simulationInterval);
-    simulationInterval = null;
-  }
-  
-  if (directionInterval) {
-    clearInterval(directionInterval);
-    directionInterval = null;
-  }
-  
-  // Reset state
-  isConnected = false;
-  isSimulationMode = false;
-  distanceHistory = [];
-  gpsUpdateCount = 0;
-  simulatedAdjustment = 0;
-  lastDistance = 0;
-  
-  // Reset UI
-  elements.distance.textContent = '--';
-  elements.circle.className = 'circle';
-  elements.statusText.textContent = 'Disconnected';
-  elements.statusText.className = 'status-value';
-  elements.rangeStatus.textContent = 'IN RANGE';
-  elements.rangeStatus.className = 'status-value safe';
-  elements.gpsAccuracy.textContent = 'GPS accuracy: --';
-  elements.gpsUpdates.textContent = '0';
-  elements.simAdjustment.textContent = '0m';
-  elements.arrow.style.transform = 'rotate(0deg)';
-  
-  updateConnectionUI();
-}
-
-// ================= DISTANCE CALCULATION =================
-function calculateDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371e3; // Earth's radius in meters
-  const φ1 = lat1 * Math.PI / 180;
-  const φ2 = lat2 * Math.PI / 180;
-  const Δφ = (lat2 - lat1) * Math.PI / 180;
-  const Δλ = (lon2 - lon1) * Math.PI / 180;
-
-  const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
-            Math.cos(φ1) * Math.cos(φ2) *
-            Math.sin(Δλ/2) * Math.sin(Δλ/2);
-  
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  return R * c;
-}
-
-function smoothDistance(distance) {
-  distanceHistory.push(distance);
-  if (distanceHistory.length > 5) {
-    distanceHistory.shift();
-  }
-  
-  const sum = distanceHistory.reduce((a, b) => a + b, 0);
-  return Math.round(sum / distanceHistory.length);
-}
-
-function calculateBearing(lat1, lon1, lat2, lon2) {
-  const φ1 = lat1 * Math.PI / 180;
-  const φ2 = lat2 * Math.PI / 180;
-  const Δλ = (lon2 - lon1) * Math.PI / 180;
-  
-  const y = Math.sin(Δλ) * Math.cos(φ2);
-  const x = Math.cos(φ1) * Math.sin(φ2) -
-            Math.sin(φ1) * Math.cos(φ2) * Math.cos(Δλ);
-  
-  const θ = Math.atan2(y, x);
-  return (θ * 180 / Math.PI + 360) % 360;
-}
-
-// ================= UI UPDATES =================
-function updateConnectionUI() {
-  if (isConnected) {
-    elements.connectBtn.textContent = 'DISCONNECT';
-    elements.connectBtn.classList.add('connected');
-  } else {
-    elements.connectBtn.textContent = 'CONNECT';
-    elements.connectBtn.classList.remove('connected');
-  }
-}
-
-function updateDistanceDisplay(distance) {
-  lastDistance = distance;
-  
-  // Update distance number with animation
-  elements.distance.textContent = Math.round(distance);
-  elements.distance.style.transform = 'scale(1.1)';
-  setTimeout(() => {
-    elements.distance.style.transform = 'scale(1)';
-  }, 200);
-  
-  // Update safety status
-  updateSafetyStatus(distance);
-}
-
-function updateSafetyStatus(distance) {
-  // Update circle color and status
-  if (distance <= safeRange) {
-    elements.circle.className = 'circle green';
-    elements.rangeStatus.textContent = 'IN RANGE';
-    elements.rangeStatus.className = 'status-value safe';
-  } else if (distance <= safeRange * 1.5) {
-    elements.circle.className = 'circle yellow';
-    elements.rangeStatus.textContent = 'WARNING';
-    elements.rangeStatus.className = 'status-value warning';
-    
-    // Add vibration simulation
-    if (navigator.vibrate) {
-      navigator.vibrate(200);
-    }
-  } else {
-    elements.circle.className = 'circle red';
-    elements.rangeStatus.textContent = 'OUT OF RANGE';
-    elements.rangeStatus.className = 'status-value danger';
-    
-    // Add stronger vibration simulation
-    if (navigator.vibrate) {
-      navigator.vibrate([100, 50, 100, 50, 100]);
+      this.startRealConnection();
     }
     
-    // Shake animation
-    elements.circle.classList.add('vibrate');
+    this.isConnected = true;
+    this.updateHardwareDisplay();
+    
+    // Simulate BLE connection sound
+    this.simulateConnectionSound();
+  }
+  
+  startSimulationMode() {
+    this.elements.deviceStatus.textContent = 'CONNECTED (SIM)';
+    this.elements.deviceStatus.className = 'status-value status-connected';
+    
+    // Start with random distance
+    this.currentDistance = 20 + Math.random() * 30;
+    this.updateDistanceDisplay(this.currentDistance);
+    
+    // Simulate BLE signal fluctuations
+    this.simulationInterval = setInterval(() => {
+      // BLE signal fluctuation simulation
+      const fluctuation = (Math.random() - 0.5) * 3;
+      this.currentDistance = Math.max(1, this.currentDistance + fluctuation);
+      this.updateDistanceDisplay(this.currentDistance);
+      
+      // Update BLE signal strength
+      this.bleSignalStrength = Math.floor(80 + Math.random() * 20);
+      this.updateBleSignal();
+    }, 1500);
+    
+    // Simulate direction changes
+    this.directionInterval = setInterval(() => {
+      this.updateDirection(Math.random() * 360);
+    }, 2000);
+    
+    this.showAlert('Simulation Mode Active - Testing BLE behavior');
+  }
+  
+  startRealConnection() {
+    // In real hardware, this would establish BLE connection
+    this.elements.deviceStatus.textContent = 'CONNECTING...';
+    
+    // Simulate BLE connection process
     setTimeout(() => {
-      elements.circle.classList.remove('vibrate');
-    }, 500);
-  }
-}
-
-// ================= SIMULATE GPS TRACKING =================
-function simulateGPSTracking(change) {
-  // This would adjust the actual GPS coordinates in Firebase
-  // For now, just update the display
-  if (lastDistance > 0) {
-    const newDistance = Math.max(1, lastDistance + change);
-    updateDistanceDisplay(newDistance);
-  }
-}
-
-// ================= INITIALIZE =================
-document.addEventListener('DOMContentLoaded', () => {
-  initializeAppState();
-  
-  // Save friend ID when changed
-  elements.friendKid.addEventListener('input', () => {
-    localStorage.setItem('kumbhBandFriendId', elements.friendKid.value);
-  });
-  
-  // Request location permission
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      () => console.log('Location permission granted'),
-      () => console.warn('Location permission denied or not available')
-    );
+      this.elements.deviceStatus.textContent = 'CONNECTED';
+      this.elements.deviceStatus.className = 'status-value status-connected';
+      
+      // Simulate initial distance reading
+      this.currentDistance = 15 + Math.random() * 40;
+      this.updateDistanceDisplay(this.currentDistance);
+      
+      // Start distance updates
+      this.simulationInterval = setInterval(() => {
+        // Simulate BLE distance updates
+        const fluctuation = (Math.random() - 0.5) * 2;
+        this.currentDistance = Math.max(1, this.currentDistance + fluctuation);
+        this.updateDistanceDisplay(this.currentDistance);
+      }, 1000);
+      
+      this.showAlert(`Connected to ${this.friendKid}`);
+    }, 1500);
   }
   
-  // Keyboard shortcuts for simulation
-  document.addEventListener('keydown', (e) => {
-    if (!isConnected) return;
-    
-    switch(e.key) {
-      case 'ArrowUp':
-      case 'w':
-        simulateDistance(5);
-        break;
-      case 'ArrowDown':
-      case 's':
-        simulateDistance(-5);
-        break;
+  disconnectBand() {
+    // Stop all intervals
+    if (this.simulationInterval) {
+      clearInterval(this.simulationInterval);
+      this.simulationInterval = null;
     }
-  });
-});
-
-// Global intervals
-let simulationInterval = null;
-let directionInterval = null;
-</script>
-
-</body>
-</html>
+    
+    if (this.directionInterval) {
+      clearInterval(this.directionInterval);
+      this.directionInterval = null;
+    }
+    
+    // Clear vibration timeout
+    if (this.vibrationTimeout) {
+      clearTimeout(this.vibrationTimeout);
+    }
+    
+    // Reset state
+    this.isConnected = false;
+    this.isSimulationMode = false;
+    this.simulatedAdjustment = 0;
+    this.currentDistance = 0;
+    this.bleSignalStrength = 0;
+    
+    // Reset display
+    this.elements.distanceValue.textContent = '--';
+    this.elements.distanceCircle.className = 'distance-circle';
+    this.elements.deviceStatus.textContent = 'DISCONNECTED';
+    this.elements.deviceStatus.className = 'status-value status-disconnected';
+    this.elements.navArrow.textContent = '⬆️';
+    this.elements.navArrow.style.transform = 'rotate(0deg)';
+    this.elements.navDirection.textContent = '--';
+    this.elements.simAdjustment.textContent = '0m';
+    
+    this.updateHardwareDisplay();
+    
+    // Simulate disconnect sound
+    this.simulateDisconnectSound();
+  }
+  
+  // ================= HARDWARE SIMULATION =================
+  simulateMovement(change) {
+    if (!this.isConnected) {
+      this.showAlert('Connect a band first');
+      return;
+    }
+    
+    // Update simulated adjustment
+    this.simulatedAdjustment += change;
+    this.elements.simAdjustment.textContent = `${this.simulatedAdjustment}m`;
+    
+    // Update current distance
+    this.currentDistance = Math.max(1, this.currentDistance + change);
+    this.updateDistanceDisplay(this.currentDistance);
+    
+    // Simulate movement effect
+    this.simulateMovementEffect(change);
+  }
+  
+  startSimulationMode() {
+    if (this.isConnected) {
+      this.disconnectBand();
+    }
+    
+    // Set up simulation mode
+    this.elements.friendKid.value = 'K-SIM';
+    this.connectBand();
+  }
+  
+  // ================= HARDWARE DISPLAY UPDATES =================
+  updateHardwareDisplay() {
+    // Update connection button
+    if (this.isConnected) {
+      this.elements.connectText.textContent = 'DISCONNECT BAND';
+      this.elements.connectBtn.classList.add('connected');
+    } else {
+      this.elements.connectText.textContent = 'CONNECT BAND';
+      this.elements.connectBtn.classList.remove('connected');
+    }
+  }
+  
+  updateDistanceDisplay(distance) {
+    this.currentDistance = distance;
+    
+    // Update distance value with hardware-like animation
+    this.elements.distanceValue.textContent = Math.round(distance);
+    this.elements.distanceValue.style.transform = 'scale(1.1)';
+    setTimeout(() => {
+      this.elements.distanceValue.style.transform = 'scale(1)';
+    }, 200);
+    
+    // Check safe range and update circle color
+    this.checkSafeRange(distance);
+    
+    // Update battery based on usage
+    this.updateBatteryUsage();
+  }
+  
+  checkSafeRange(distance) {
+    const circle = this.elements.distanceCircle;
+    const roundedDistance = Math.round(distance);
+    
+    // Remove all classes
+    circle.className = 'distance-circle';
+    
+    if (roundedDistance <= this.safeRange) {
+      circle.classList.add('safe');
+    } else if (roundedDistance <= this.safeRange * 1.5) {
+      circle.classList.add('warning');
+      this.triggerWarningAlert(roundedDistance);
+    } else {
+      circle.classList.add('danger');
+      this.triggerDangerAlert(roundedDistance);
+    }
+  }
+  
+  updateDirection(bearing) {
+    // Convert bearing to arrow rotation
+    this.elements.navArrow.style.transform = `rotate(${bearing}deg)`;
+    
+    // Set direction text
+    if (bearing >= 315 || bearing < 45) {
+      this.elements.navArrow.textContent = '⬆️';
+      this.elements.navDirection.textContent = 'NORTH';
+    } else if (bearing >= 45 && bearing < 135) {
+      this.elements.navArrow.textContent = '➡️';
+      this.elements.navDirection.textContent = 'EAST';
+    } else if (bearing >= 135 && bearing < 225) {
+      this.elements.navArrow.textContent = '⬇️';
+      this.elements.navDirection.textContent = 'SOUTH';
+    } else {
+      this.elements.navArrow.textContent = '⬅️';
+      this.elements.navDirection.textContent = 'WEST';
+    }
+  }
+  
+  updateBleSignal() {
+    // This would update BLE signal strength display
+    // For now, just log it
+    console.log(`BLE Signal: ${this.bleSignalStrength}%`);
+  }
+  
+  updateBatteryUsage() {
+    // Simulate battery drain based on usage
+    if (this.isConnected) {
+      this.batteryLevel = Math.max(10, this.batteryLevel - 0.01);
+    }
+  }
+  
+  // ================= HARDWARE ALERTS & FEEDBACK =================
+  triggerWarningAlert(distance) {
+    this.showAlert(`Approaching safe limit: ${distance}m`);
+    this.simulateVibration([100, 50, 100]);
+  }
+  
+  triggerDangerAlert(distance) {
+    this.showAlert(`OUT OF SAFE RANGE! ${distance}m away`);
+    this.simulateVibration([200, 100, 200, 100, 200]);
+    
+    // Make the whole circle vibrate
+    this.elements.distanceCircle.classList.add('vibrating');
+    setTimeout(() => {
+      this.elements.distanceCircle.classList.remove('vibrating');
+    }, 1000);
+  }
+  
+  showAlert(message) {
+    const alert = this.elements.hardwareAlert;
+    alert.textContent = message;
+    alert.style.display = 'block';
+    
+    setTimeout(() => {
+      alert.style.display = 'none';
+    }, 3000);
+  }
+  
+  simulateVibration(pattern) {
+    // Simulate hardware vibration
+    if (navigator.vibrate) {
+      navigator.vibrate(pattern);
+    }
+    
+    // Visual vibration feedback
+    document.body.style.transform = 'translateX(2px)';
+    setTimeout(() => {
+      document.body.style.transform = 'translateX(-2px)';
+      setTimeout(() => {
+        document.body.style.transform = 'translateX(0)';
+      }, 50);
+    }, 50);
+  }
+  
+  simulateButtonClick() {
+    // Simulate hardware button click sound/feedback
+    document.body.style.transform = 'scale(0.99)';
+    setTimeout(() => {
+      document.body.style.transform = 'scale(1)';
+    }, 100);
+  }
+  
+  simulateConnectionSound() {
+    // Simulate BLE connection sound
+    console.log('🔊 BLE Connected: Beep-beep!');
+  }
+  
+  simulateDisconnectSound() {
+    // Simulate BLE disconnect sound
+    console.log('🔊 BLE Disconnected: Boop!
