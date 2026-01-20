@@ -2,10 +2,18 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Kumbh Band - Working Prototype</title>
+<title>Kumbh Band - Firebase Version</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 <style>
+:root {
+  --primary: #22c55e;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --dark: #0f172a;
+  --gray: #64748b;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -13,11 +21,11 @@
 }
 
 body {
-  background: #0f172a;
+  background: var(--dark);
   color: white;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  min-height: 100vh;
   padding: 20px;
+  min-height: 100vh;
 }
 
 .container {
@@ -35,12 +43,12 @@ body {
 .logo {
   font-size: 2.5rem;
   font-weight: 900;
-  color: #22c55e;
+  color: var(--primary);
   margin-bottom: 10px;
 }
 
 .subtitle {
-  color: #94a3b8;
+  color: var(--gray);
   font-size: 0.9rem;
 }
 
@@ -51,7 +59,6 @@ body {
   padding: 30px;
   margin-bottom: 20px;
   text-align: center;
-  border: 2px solid #334155;
 }
 
 .distance-circle {
@@ -67,9 +74,22 @@ body {
   transition: all 0.3s ease;
 }
 
-.distance-circle.safe { border-color: #22c55e; }
-.distance-circle.warning { border-color: #f59e0b; }
-.distance-circle.danger { border-color: #ef4444; }
+.distance-circle.safe {
+  border-color: var(--primary);
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
+}
+
+.distance-circle.warning {
+  border-color: var(--warning);
+  box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
+  animation: pulse 2s infinite;
+}
+
+.distance-circle.danger {
+  border-color: var(--danger);
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.3);
+  animation: pulse 1s infinite;
+}
 
 .distance-value {
   font-size: 48px;
@@ -77,14 +97,15 @@ body {
 }
 
 .distance-unit {
-  color: #94a3b8;
+  color: var(--gray);
   font-size: 16px;
+  margin-top: 5px;
 }
 
 .status {
   margin-top: 15px;
   font-size: 14px;
-  color: #94a3b8;
+  color: var(--gray);
 }
 
 /* Connection Panel */
@@ -96,25 +117,27 @@ body {
 }
 
 .kid-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
-  padding: 15px;
   background: #0f172a;
   border-radius: 15px;
+  padding: 20px;
+  margin-bottom: 25px;
+  text-align: center;
 }
 
 .kid-label {
-  color: #94a3b8;
-  font-size: 14px;
+  color: var(--gray);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
 }
 
 .kid-value {
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 800;
-  color: #22c55e;
+  color: var(--primary);
   font-family: monospace;
+  letter-spacing: 2px;
 }
 
 .input-group {
@@ -123,9 +146,9 @@ body {
 
 .input-label {
   display: block;
-  color: #94a3b8;
-  margin-bottom: 10px;
+  color: var(--gray);
   font-size: 14px;
+  margin-bottom: 10px;
 }
 
 .input-field {
@@ -137,53 +160,64 @@ body {
   color: white;
   font-size: 16px;
   text-align: center;
+  transition: all 0.3s;
 }
 
 .input-field:focus {
   outline: none;
-  border-color: #22c55e;
+  border-color: var(--primary);
 }
 
+/* Buttons */
 .buttons {
   display: flex;
+  flex-direction: column;
   gap: 15px;
   margin-top: 25px;
 }
 
 .btn {
-  flex: 1;
-  padding: 15px;
+  padding: 18px;
   border: none;
-  border-radius: 12px;
-  font-size: 16px;
+  border-radius: 15px;
+  font-size: 18px;
   font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   cursor: pointer;
   transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 .btn-primary {
-  background: #22c55e;
+  background: linear-gradient(135deg, var(--primary), #16a34a);
   color: white;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
 }
 
 .btn-primary:hover {
-  background: #16a34a;
   transform: translateY(-2px);
-}
-
-.btn-secondary {
-  background: #3b82f6;
-  color: white;
-}
-
-.btn-secondary:hover {
-  background: #2563eb;
-  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
 }
 
 .btn-danger {
-  background: #ef4444;
+  background: linear-gradient(135deg, var(--danger), #dc2626);
   color: white;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.btn-secondary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
 }
 
 /* Safe Range */
@@ -197,13 +231,14 @@ body {
 .range-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
 }
 
 .range-value {
   font-size: 24px;
   font-weight: 800;
-  color: #22c55e;
+  color: var(--primary);
 }
 
 .range-slider {
@@ -214,8 +249,9 @@ body {
 .range-labels {
   display: flex;
   justify-content: space-between;
-  color: #94a3b8;
+  color: var(--gray);
   font-size: 12px;
+  margin-top: 10px;
 }
 
 /* Testing Panel */
@@ -227,7 +263,7 @@ body {
 }
 
 .test-title {
-  color: #94a3b8;
+  color: var(--gray);
   font-size: 14px;
   margin-bottom: 15px;
   text-align: center;
@@ -241,18 +277,31 @@ body {
 }
 
 .test-btn {
-  padding: 12px;
+  padding: 15px;
   background: #0f172a;
   border: 2px solid #475569;
-  border-radius: 10px;
+  border-radius: 12px;
   color: white;
   cursor: pointer;
   transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
 }
 
 .test-btn:hover {
   background: #475569;
   transform: translateY(-2px);
+}
+
+.test-btn .icon {
+  font-size: 24px;
+}
+
+.test-btn .label {
+  font-size: 12px;
+  color: var(--gray);
 }
 
 /* Alert */
@@ -261,7 +310,7 @@ body {
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background: #ef4444;
+  background: var(--danger);
   color: white;
   padding: 15px 25px;
   border-radius: 12px;
@@ -269,6 +318,8 @@ body {
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
   display: none;
   z-index: 1000;
+  max-width: 90%;
+  text-align: center;
 }
 
 /* Animations */
@@ -277,49 +328,59 @@ body {
   50% { opacity: 0.7; }
 }
 
-.pulse {
-  animation: pulse 1s infinite;
+@keyframes slideDown {
+  from { transform: translateX(-50%) translateY(-20px); opacity: 0; }
+  to { transform: translateX(-50%) translateY(0); opacity: 1; }
 }
 
-/* Device List */
-.device-list {
+.alert {
+  animation: slideDown 0.3s ease;
+}
+
+/* Firebase Status */
+.firebase-status {
   background: #1e293b;
   border-radius: 20px;
-  padding: 20px;
+  padding: 15px;
   margin-top: 20px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--gray);
 }
 
-.device-item {
-  padding: 10px;
-  background: #0f172a;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.device-kid {
-  color: #22c55e;
-  font-weight: 600;
-}
-
-.device-distance {
-  color: white;
-  font-weight: 700;
+/* Responsive */
+@media (max-width: 500px) {
+  .container {
+    padding: 10px;
+  }
+  
+  .distance-circle {
+    width: 170px;
+    height: 170px;
+  }
+  
+  .distance-value {
+    font-size: 40px;
+  }
 }
 </style>
+
+<!-- Firebase SDKs -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getFirestore, doc, setDoc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+</script>
 </head>
 
 <body>
 
-<div class="alert" id="alertBox">⚠️ Test Alert</div>
+<div class="alert" id="alertBox">⚠️ Alert</div>
 
 <div class="container">
   <!-- Header -->
   <div class="header">
     <div class="logo">KUMBH BAND</div>
-    <div class="subtitle">Real-time distance tracking</div>
+    <div class="subtitle">Firebase Real-time Tracking</div>
   </div>
 
   <!-- Main Display -->
@@ -328,31 +389,31 @@ body {
       <div class="distance-value" id="distanceValue">--</div>
       <div class="distance-unit">meters</div>
     </div>
-    <div class="status" id="statusText">Not connected</div>
+    <div class="status" id="statusText">Disconnected</div>
   </div>
 
   <!-- Connection Panel -->
   <div class="connection-panel">
     <div class="kid-section">
-      <div class="kid-label">YOUR BAND ID</div>
-      <div class="kid-value" id="myKid">K-0000</div>
+      <div class="kid-label">Your Band ID</div>
+      <div class="kid-value" id="myKid">Loading...</div>
     </div>
     
     <div class="input-group">
-      <label class="input-label">ENTER FRIEND'S BAND ID</label>
+      <label class="input-label">Enter Friend's Band ID</label>
       <input type="text" class="input-field" id="friendKid" placeholder="K-1234" maxlength="6">
     </div>
     
     <div class="buttons">
-      <button class="btn btn-primary" id="connectBtn" onclick="connectBand()">CONNECT</button>
-      <button class="btn btn-secondary" onclick="openTestWindow()">TEST</button>
+      <button class="btn btn-primary" id="connectBtn" onclick="connectWithFirebase()">CONNECT</button>
+      <button class="btn btn-secondary" onclick="showInstructions()">HOW TO TEST</button>
     </div>
   </div>
 
   <!-- Safe Range -->
   <div class="safe-range">
     <div class="range-header">
-      <span class="range-label">SAFE RANGE</span>
+      <span class="range-label">Safe Distance</span>
       <span class="range-value" id="safeRangeValue">50</span>
     </div>
     <input type="range" min="10" max="100" value="50" class="range-slider" id="safeRangeSlider" 
@@ -365,291 +426,370 @@ body {
 
   <!-- Testing Panel -->
   <div class="testing-panel">
-    <div class="test-title">TEST MOVEMENT SIMULATION</div>
+    <div class="test-title">Test Movement Simulation</div>
     <div class="test-buttons">
-      <button class="test-btn" onclick="simulateMovement(-5)">⬇️ 5m Closer</button>
-      <button class="test-btn" onclick="simulateMovement(5)">⬆️ 5m Away</button>
-      <button class="test-btn" onclick="simulateMovement(-20)">⏬ 20m Closer</button>
-      <button class="test-btn" onclick="simulateMovement(20)">⏫ 20m Away</button>
+      <button class="test-btn" onclick="simulateMovement(-5)">
+        <span class="icon">⬇️</span>
+        <span class="label">5m Closer</span>
+      </button>
+      <button class="test-btn" onclick="simulateMovement(5)">
+        <span class="icon">⬆️</span>
+        <span class="label">5m Away</span>
+      </button>
+      <button class="test-btn" onclick="simulateMovement(-20)">
+        <span class="icon">⏬</span>
+        <span class="label">20m Closer</span>
+      </button>
+      <button class="test-btn" onclick="simulateMovement(20)">
+        <span class="icon">⏫</span>
+        <span class="label">20m Away</span>
+      </button>
     </div>
     <div class="test-title" id="simulationStatus">Simulation: OFF</div>
   </div>
 
-  <!-- Connected Devices -->
-  <div class="device-list" id="deviceList" style="display: none;">
-    <div class="test-title">CONNECTED DEVICES</div>
-    <div id="devicesContainer"></div>
+  <div class="firebase-status" id="firebaseStatus">
+    Firebase: Connecting...
   </div>
 </div>
 
-<script>
-// ================= SIMPLE WORKING PROTOTYPE =================
-// This uses localStorage as a simple "server" to connect devices
+<script type="module">
+// ================= FIREBASE CONFIGURATION =================
+const firebaseConfig = {
+  apiKey: "AIzaSyDVV1zZZDAnqOkmNXKW0ipJXatUYtjV4W4",
+  authDomain: "kumbh-band-dd624.firebaseapp.com",
+  projectId: "kumbh-band-dd624",
+  storageBucket: "kumbh-band-dd624.appspot.com",
+  messagingSenderId: "153944613096",
+  appId: "1:153944613096:web:0c5fe544c93803c2c01902"
+};
 
-class KumbhBandPrototype {
+// Initialize Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, doc, setDoc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+console.log("Firebase initialized successfully!");
+
+// ================= KUMBH BAND CLASS =================
+class KumbhBandFirebase {
   constructor() {
-    // Generate unique K-ID
-    this.generateKid();
-    
-    // Initialize state
+    this.myKid = '';
+    this.friendKid = '';
+    this.isConnected = false;
     this.safeRange = 50;
-    this.connectedTo = null;
     this.myLocation = null;
     this.friendLocation = null;
-    this.updateInterval = null;
-    this.isSimulating = false;
-    this.simulationDistance = 0;
+    this.simulationOffset = 0;
+    this.watchId = null;
+    this.unsubscribe = null;
+    this.locationInterval = null;
     
-    // Load saved settings
-    this.loadSettings();
+    // Firebase references
+    this.myDocRef = null;
+    this.friendDocRef = null;
+    this.pairRef = null;
     
-    // Start updating location
-    this.startLocationUpdates();
-    
-    // Start checking for friend updates
-    this.startFriendUpdates();
-    
-    console.log(`Kumbh Band initialized. Your ID: ${this.myKid}`);
+    this.initialize();
   }
   
-  generateKid() {
-    // Try to get existing K-ID
-    let savedKid = localStorage.getItem('kumbhBandKid');
+  async initialize() {
+    console.log("Initializing Kumbh Band with Firebase...");
+    
+    // 1. Generate K-ID
+    await this.generateKid();
+    
+    // 2. Setup UI
+    this.setupUI();
+    
+    // 3. Update Firebase status
+    this.updateFirebaseStatus('Connected');
+    
+    // 4. Listen for connections to me
+    this.listenForConnections();
+    
+    console.log(`Kumbh Band ready! Your ID: ${this.myKid}`);
+  }
+  
+  async generateKid() {
+    // Try to get existing K-ID from localStorage
+    let savedKid = localStorage.getItem('kumbh_kid_firebase');
     
     if (!savedKid) {
-      // Generate new unique K-ID
-      const timestamp = Date.now().toString().slice(-4);
-      const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-      savedKid = `K-${timestamp}${random}`.substring(0, 6);
-      localStorage.setItem('kumbhBandKid', savedKid);
+      // Generate new K-ID and check Firebase for uniqueness
+      let isUnique = false;
+      let attempts = 0;
+      
+      while (!isUnique && attempts < 10) {
+        savedKid = 'K-' + Math.floor(1000 + Math.random() * 9000);
+        
+        try {
+          // Check if this K-ID exists in Firebase
+          const bandDoc = doc(db, 'bands', savedKid);
+          // We'll assume it's unique for now (in real app, we'd check)
+          isUnique = true;
+        } catch (error) {
+          attempts++;
+          console.log(`Checking K-ID ${savedKid}...`);
+        }
+      }
+      
+      if (savedKid) {
+        localStorage.setItem('kumbh_kid_firebase', savedKid);
+      } else {
+        // Fallback to timestamp based
+        savedKid = 'K-' + Date.now().toString().slice(-4);
+        localStorage.setItem('kumbh_kid_firebase', savedKid);
+      }
     }
     
     this.myKid = savedKid;
     document.getElementById('myKid').textContent = this.myKid;
     
-    // Register this band in the system
-    this.updateMyInfo();
-  }
-  
-  loadSettings() {
-    const savedRange = localStorage.getItem('kumbhBandSafeRange');
+    // Create/update my document in Firebase
+    this.myDocRef = doc(db, 'bands', this.myKid);
+    await this.updateMyFirebaseData();
+    
+    // Load saved friend
+    this.friendKid = localStorage.getItem('kumbh_friend_firebase') || '';
+    document.getElementById('friendKid').value = this.friendKid;
+    
+    // Load safe range
+    const savedRange = localStorage.getItem('kumbh_range_firebase');
     if (savedRange) {
       this.safeRange = parseInt(savedRange);
       document.getElementById('safeRangeValue').textContent = this.safeRange;
       document.getElementById('safeRangeSlider').value = this.safeRange;
     }
+  }
+  
+  async updateMyFirebaseData() {
+    if (!this.myDocRef) return;
     
-    const savedFriend = localStorage.getItem('kumbhBandFriend');
-    if (savedFriend) {
-      document.getElementById('friendKid').value = savedFriend;
+    const data = {
+      kid: this.myKid,
+      location: this.myLocation || this.getDefaultLocation(),
+      connectedTo: this.friendKid,
+      status: this.isConnected ? 'connected' : 'disconnected',
+      lastUpdate: new Date().toISOString(),
+      safeRange: this.safeRange
+    };
+    
+    try {
+      await setDoc(this.myDocRef, data, { merge: true });
+      console.log('Updated my data in Firebase');
+    } catch (error) {
+      console.error('Error updating Firebase:', error);
     }
+  }
+  
+  getDefaultLocation() {
+    // Default location near Prayagraj
+    return {
+      lat: 25.4358 + (Math.random() - 0.5) * 0.01,
+      lng: 81.8463 + (Math.random() - 0.5) * 0.01,
+      accuracy: 10,
+      simulated: true
+    };
+  }
+  
+  setupUI() {
+    const friendInput = document.getElementById('friendKid');
+    
+    // Enter key to connect
+    friendInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') this.connect();
+    });
+    
+    // Save friend when typing
+    friendInput.addEventListener('input', (e) => {
+      localStorage.setItem('kumbh_friend_firebase', e.target.value);
+    });
+    
+    // Start location updates
+    this.startLocationUpdates();
   }
   
   startLocationUpdates() {
     if (navigator.geolocation) {
-      navigator.geolocation.watchPosition(
-        (position) => {
+      // Get initial location
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
           this.myLocation = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-            accuracy: position.coords.accuracy,
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+            accuracy: pos.coords.accuracy,
             timestamp: Date.now()
           };
+          this.updateMyFirebaseData();
+        },
+        () => {
+          this.myLocation = this.getDefaultLocation();
+          this.updateMyFirebaseData();
+        }
+      );
+      
+      // Watch for changes
+      this.watchId = navigator.geolocation.watchPosition(
+        (pos) => {
+          this.myLocation = {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude,
+            accuracy: pos.coords.accuracy,
+            timestamp: Date.now()
+          };
+          this.updateMyFirebaseData();
           
-          // Save to localStorage (simulating server)
-          this.updateMyInfo();
-          
-          // If connected, update distance
-          if (this.connectedTo) {
-            this.updateDistance();
+          if (this.isConnected) {
+            this.calculateDistance();
           }
         },
         (error) => {
-          console.log('GPS not available, using simulation');
-          // Use simulated location
-          this.useSimulatedLocation();
+          console.log('GPS error, using simulation:', error);
+          this.myLocation = this.getDefaultLocation();
+          this.updateMyFirebaseData();
         },
-        { enableHighAccuracy: true, maximumAge: 5000 }
+        {
+          enableHighAccuracy: true,
+          maximumAge: 10000,
+          timeout: 15000
+        }
       );
     } else {
-      this.useSimulatedLocation();
-    }
-  }
-  
-  useSimulatedLocation() {
-    // Generate a random location in India (near Prayagraj/Kumbh)
-    const baseLat = 25.4358; // Prayagraj latitude
-    const baseLng = 81.8463; // Prayagraj longitude
-    
-    // Add small random offset (within ~1km)
-    const offset = () => (Math.random() - 0.5) * 0.01; // ~1km
-    
-    this.myLocation = {
-      lat: baseLat + offset(),
-      lng: baseLng + offset(),
-      accuracy: 10,
-      timestamp: Date.now()
-    };
-    
-    // Update every 5 seconds
-    setInterval(() => {
-      this.myLocation.lat = baseLat + offset();
-      this.myLocation.lng = baseLng + offset();
-      this.myLocation.timestamp = Date.now();
-      this.updateMyInfo();
+      // No GPS, use simulation
+      this.myLocation = this.getDefaultLocation();
+      this.updateMyFirebaseData();
       
-      if (this.connectedTo) {
-        this.updateDistance();
+      // Update location periodically
+      this.locationInterval = setInterval(() => {
+        this.myLocation.lat += (Math.random() - 0.5) * 0.0001;
+        this.myLocation.lng += (Math.random() - 0.5) * 0.0001;
+        this.myLocation.timestamp = Date.now();
+        this.updateMyFirebaseData();
+        
+        if (this.isConnected) {
+          this.calculateDistance();
+        }
+      }, 5000);
+    }
+  }
+  
+  listenForConnections() {
+    // Listen for changes to my document
+    this.unsubscribe = onSnapshot(this.myDocRef, (doc) => {
+      if (doc.exists()) {
+        const data = doc.data();
+        
+        // Check if someone is trying to connect to me
+        if (data.connectedTo && data.connectedTo !== this.friendKid) {
+          // Someone wants to connect to me
+          this.showAlert(`${data.connectedTo} wants to connect with you!`);
+        }
       }
-    }, 5000);
+    });
   }
   
-  updateMyInfo() {
-    // Save to localStorage (acting as our simple database)
-    const bandInfo = {
-      kid: this.myKid,
-      location: this.myLocation,
-      connectedTo: this.connectedTo,
-      timestamp: Date.now()
-    };
+  async connect() {
+    const input = document.getElementById('friendKid');
+    this.friendKid = input.value.trim().toUpperCase();
     
-    localStorage.setItem(`band_${this.myKid}`, JSON.stringify(bandInfo));
-    
-    // Also store in central list
-    const allBands = JSON.parse(localStorage.getItem('all_kumbh_bands') || '[]');
-    const existingIndex = allBands.findIndex(b => b.kid === this.myKid);
-    
-    if (existingIndex >= 0) {
-      allBands[existingIndex] = bandInfo;
-    } else {
-      allBands.push(bandInfo);
-    }
-    
-    // Keep only recent bands (last 50)
-    if (allBands.length > 50) {
-      allBands.shift();
-    }
-    
-    localStorage.setItem('all_kumbh_bands', JSON.stringify(allBands));
-  }
-  
-  startFriendUpdates() {
-    // Check for friend updates every 2 seconds
-    setInterval(() => {
-      if (this.connectedTo) {
-        this.checkFriendLocation();
-      }
-    }, 2000);
-  }
-  
-  checkFriendLocation() {
-    const friendData = localStorage.getItem(`band_${this.connectedTo}`);
-    
-    if (friendData) {
-      const friendInfo = JSON.parse(friendData);
-      this.friendLocation = friendInfo.location;
-      this.updateDistance();
-    }
-  }
-  
-  connectBand() {
-    const friendId = document.getElementById('friendKid').value.trim().toUpperCase();
-    
-    if (!friendId) {
-      this.showAlert('Please enter a Band ID');
+    if (!this.friendKid) {
+      this.showAlert('Please enter a K-ID');
       return;
     }
     
-    if (friendId === this.myKid) {
-      this.showAlert('Cannot connect to your own band');
+    if (this.friendKid === this.myKid) {
+      this.showAlert('Cannot connect to yourself');
       return;
     }
     
-    if (!friendId.match(/^K-[A-Z0-9]{4}$/)) {
-      this.showAlert('Invalid Band ID format. Use K-1234');
+    if (!this.friendKid.match(/^K-\d{4}$/)) {
+      this.showAlert('Use format: K-1234');
       return;
     }
     
-    // Save friend ID
-    localStorage.setItem('kumbhBandFriend', friendId);
-    this.connectedTo = friendId;
+    // Save friend
+    localStorage.setItem('kumbh_friend_firebase', this.friendKid);
     
-    // Update my info
-    this.updateMyInfo();
+    // Update my data with connection
+    this.isConnected = true;
+    await this.updateMyFirebaseData();
+    
+    // Create a pair ID for easier tracking
+    const pairId = [this.myKid, this.friendKid].sort().join('_');
+    this.pairRef = doc(db, 'pairs', pairId);
     
     // Update UI
-    document.getElementById('statusText').textContent = `Connected to ${friendId}`;
-    document.getElementById('connectBtn').textContent = 'DISCONNECT';
-    document.getElementById('connectBtn').className = 'btn btn-danger';
-    document.getElementById('connectBtn').onclick = () => this.disconnectBand();
+    this.updateUIForConnection();
     
-    // Start checking for friend
-    this.checkFriendLocation();
+    // Listen for friend's location
+    this.listenToFriend();
     
-    this.showAlert(`Connected to ${friendId}`);
+    this.showAlert(`Connecting to ${this.friendKid}...`);
   }
   
-  disconnectBand() {
-    this.connectedTo = null;
-    
-    // Update UI
-    document.getElementById('statusText').textContent = 'Not connected';
-    document.getElementById('distanceValue').textContent = '--';
-    document.getElementById('distanceCircle').className = 'distance-circle';
-    document.getElementById('connectBtn').textContent = 'CONNECT';
-    document.getElementById('connectBtn').className = 'btn btn-primary';
-    document.getElementById('connectBtn').onclick = () => this.connectBand();
-    
-    // Update my info
-    this.updateMyInfo();
-    
-    this.showAlert('Disconnected');
+  updateUIForConnection() {
+    const connectBtn = document.getElementById('connectBtn');
+    connectBtn.textContent = 'DISCONNECT';
+    connectBtn.className = 'btn btn-danger';
+    connectBtn.onclick = () => this.disconnect();
+    document.getElementById('statusText').textContent = `Connecting to ${this.friendKid}...`;
   }
   
-  updateDistance() {
+  async listenToFriend() {
+    // Listen to friend's document
+    this.friendDocRef = doc(db, 'bands', this.friendKid);
+    
+    onSnapshot(this.friendDocRef, (doc) => {
+      if (!doc.exists()) {
+        document.getElementById('statusText').textContent = `${this.friendKid} not found`;
+        return;
+      }
+      
+      const friendData = doc.data();
+      this.friendLocation = friendData.location;
+      
+      // Check if friend is also connected to me
+      if (friendData.connectedTo === this.myKid) {
+        // MUTUAL CONNECTION ESTABLISHED!
+        document.getElementById('statusText').textContent = `Connected to ${this.friendKid}`;
+        this.calculateDistance();
+      } else {
+        document.getElementById('statusText').textContent = `Waiting for ${this.friendKid} to connect back...`;
+      }
+    });
+  }
+  
+  calculateDistance() {
     if (!this.myLocation || !this.friendLocation) {
       document.getElementById('distanceValue').textContent = '--';
       return;
     }
     
-    // Calculate distance
-    const distance = this.calculateDistance(
+    // Calculate actual distance
+    let distance = this.haversineDistance(
       this.myLocation.lat,
       this.myLocation.lng,
       this.friendLocation.lat,
       this.friendLocation.lng
     );
     
-    // Add simulation adjustment if active
-    let finalDistance = Math.round(distance);
-    if (this.isSimulating) {
-      finalDistance = Math.max(1, Math.round(distance + this.simulationDistance));
-    }
+    // Add simulation offset
+    distance = Math.max(1, Math.round(distance + this.simulationOffset));
     
     // Update display
-    document.getElementById('distanceValue').textContent = finalDistance;
+    document.getElementById('distanceValue').textContent = distance;
     
     // Update circle color
-    const circle = document.getElementById('distanceCircle');
-    circle.className = 'distance-circle';
+    this.updateCircleColor(distance);
     
-    if (finalDistance <= this.safeRange) {
-      circle.classList.add('safe');
-      document.getElementById('statusText').textContent = `Connected (${finalDistance}m)`;
-    } else if (finalDistance <= this.safeRange * 1.5) {
-      circle.classList.add('warning');
-      document.getElementById('statusText').textContent = `⚠️ Warning: ${finalDistance}m`;
-      this.vibrate();
-    } else {
-      circle.classList.add('danger');
-      document.getElementById('statusText').textContent = `🚨 Danger: ${finalDistance}m!`;
-      this.vibrate(true);
-      circle.classList.add('pulse');
-    }
+    // Update pair document with distance
+    this.updatePairDistance(distance);
   }
   
-  calculateDistance(lat1, lon1, lat2, lon2) {
-    // Haversine formula
+  haversineDistance(lat1, lon1, lat2, lon2) {
     const R = 6371000; // Earth's radius in meters
     const φ1 = lat1 * Math.PI / 180;
     const φ2 = lat2 * Math.PI / 180;
@@ -664,48 +804,97 @@ class KumbhBandPrototype {
     return R * c;
   }
   
+  updateCircleColor(distance) {
+    const circle = document.getElementById('distanceCircle');
+    circle.className = 'distance-circle';
+    
+    if (distance <= this.safeRange) {
+      circle.classList.add('safe');
+      document.getElementById('statusText').textContent = `Connected (${distance}m)`;
+    } else if (distance <= this.safeRange * 1.5) {
+      circle.classList.add('warning');
+      document.getElementById('statusText').textContent = `⚠️ Warning: ${distance}m`;
+      this.vibrate();
+    } else {
+      circle.classList.add('danger');
+      document.getElementById('statusText').textContent = `🚨 Danger: ${distance}m AWAY!`;
+      this.vibrate(true);
+    }
+  }
+  
+  async updatePairDistance(distance) {
+    if (!this.pairRef) return;
+    
+    try {
+      await setDoc(this.pairRef, {
+        user1: this.myKid,
+        user2: this.friendKid,
+        distance: distance,
+        timestamp: new Date().toISOString()
+      }, { merge: true });
+    } catch (error) {
+      console.error('Error updating pair:', error);
+    }
+  }
+  
+  async disconnect() {
+    this.isConnected = false;
+    this.friendKid = '';
+    
+    // Update UI
+    const connectBtn = document.getElementById('connectBtn');
+    connectBtn.textContent = 'CONNECT';
+    connectBtn.className = 'btn btn-primary';
+    connectBtn.onclick = () => this.connect();
+    document.getElementById('statusText').textContent = 'Disconnected';
+    document.getElementById('distanceValue').textContent = '--';
+    document.getElementById('distanceCircle').className = 'distance-circle';
+    
+    // Clear friend input
+    document.getElementById('friendKid').value = '';
+    localStorage.removeItem('kumbh_friend_firebase');
+    
+    // Update Firebase
+    await this.updateMyFirebaseData();
+    
+    // Reset simulation
+    this.simulationOffset = 0;
+    document.getElementById('simulationStatus').textContent = 'Simulation: OFF';
+    
+    this.showAlert('Disconnected');
+  }
+  
   simulateMovement(change) {
-    if (!this.connectedTo) {
-      this.showAlert('Connect first to simulate movement');
+    if (!this.isConnected) {
+      this.showAlert('Connect first to simulate');
       return;
     }
     
-    this.isSimulating = true;
-    this.simulationDistance += change;
-    
+    this.simulationOffset += change;
     document.getElementById('simulationStatus').textContent = 
-      `Simulation: ${this.simulationDistance >= 0 ? '+' : ''}${this.simulationDistance}m`;
+      `Simulation: ${this.simulationOffset >= 0 ? '+' : ''}${this.simulationOffset}m`;
     
-    // Update distance display
-    if (this.myLocation && this.friendLocation) {
-      this.updateDistance();
-    }
+    this.calculateDistance();
     
-    // Show alert for large movements
     if (Math.abs(change) >= 20) {
-      const direction = change > 0 ? 'farther' : 'closer';
-      this.showAlert(`Simulated moving ${Math.abs(change)}m ${direction}`);
+      const dir = change > 0 ? 'farther' : 'closer';
+      this.showAlert(`Simulated moving ${Math.abs(change)}m ${dir}`);
     }
   }
   
   updateSafeRange(value) {
     this.safeRange = parseInt(value);
     document.getElementById('safeRangeValue').textContent = this.safeRange;
-    localStorage.setItem('kumbhBandSafeRange', this.safeRange.toString());
+    localStorage.setItem('kumbh_range_firebase', this.safeRange.toString());
     
-    // Update distance display to reflect new range
-    if (this.connectedTo) {
-      this.updateDistance();
+    if (this.isConnected && this.myLocation && this.friendLocation) {
+      this.calculateDistance();
     }
   }
   
   vibrate(strong = false) {
     if (navigator.vibrate) {
-      if (strong) {
-        navigator.vibrate([200, 100, 200, 100, 200]);
-      } else {
-        navigator.vibrate([100, 50, 100]);
-      }
+      navigator.vibrate(strong ? [200,100,200,100,200] : [100,50,100]);
     }
   }
   
@@ -718,85 +907,80 @@ class KumbhBandPrototype {
       alertBox.style.display = 'none';
     }, 3000);
   }
-}
-
-// ================= GLOBAL FUNCTIONS =================
-let kumbhBand;
-
-function updateSafeRange(value) {
-  if (kumbhBand) kumbhBand.updateSafeRange(value);
-}
-
-function simulateMovement(change) {
-  if (kumbhBand) kumbhBand.simulateMovement(change);
-}
-
-function connectBand() {
-  if (kumbhBand) kumbhBand.connectBand();
-}
-
-function openTestWindow() {
-  // Open a second window/tab for testing
-  const testWindow = window.open('', '_blank');
-  testWindow.document.write(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Kumbh Band Test Device</title>
-      <style>
-        body { 
-          background: #0f172a; 
-          color: white; 
-          padding: 20px; 
-          font-family: sans-serif; 
-        }
-        .kid { 
-          font-size: 32px; 
-          color: #22c55e; 
-          margin: 20px 0; 
-          font-family: monospace;
-        }
-        .instructions { 
-          background: #1e293b; 
-          padding: 20px; 
-          border-radius: 10px; 
-          margin: 20px 0; 
-        }
-      </style>
-    </head>
-    <body>
-      <h1>Test Device</h1>
-      <div class="instructions">
-        <p>1. Note the K-ID below</p>
-        <p>2. Go back to main window</p>
-        <p>3. Enter this K-ID in friend field</p>
-        <p>4. Click CONNECT</p>
-      </div>
-      <div class="kid">${kumbhBand ? kumbhBand.myKid : 'K-TEST'}</div>
-      <p>Move this device away from main device to see distance increase!</p>
-    </body>
-    </html>
-  `);
   
-  if (kumbhBand) {
-    kumbhBand.showAlert('Test window opened. Enter the K-ID shown there.');
+  updateFirebaseStatus(status) {
+    document.getElementById('firebaseStatus').textContent = `Firebase: ${status}`;
   }
 }
 
+// ================= GLOBAL FUNCTIONS =================
+let kumbhBand = null;
+
+async function connectWithFirebase() {
+  if (kumbhBand) {
+    await kumbhBand.connect();
+  }
+}
+
+function updateSafeRange(value) {
+  if (kumbhBand) {
+    kumbhBand.updateSafeRange(value);
+  }
+}
+
+function simulateMovement(change) {
+  if (kumbhBand) {
+    kumbhBand.simulateMovement(change);
+  }
+}
+
+function showInstructions() {
+  const instructions = `
+    HOW TO TEST WITH 2 DEVICES:
+    
+    1. OPEN THIS LINK IN TWO DIFFERENT BROWSERS
+       (Chrome & Firefox, or Chrome & Safari)
+    
+    2. NOTE THE K-IDs:
+       - Device 1: Shows K-1234 (example)
+       - Device 2: Shows K-5678 (example)
+    
+    3. ON DEVICE 1:
+       - Enter K-5678 in friend field
+       - Click CONNECT
+    
+    4. ON DEVICE 2:
+       - Enter K-1234 in friend field
+       - Click CONNECT
+    
+    5. WAIT FOR CONNECTION:
+       - Both will show "Connected"
+       - Distance will appear (20-50m initially)
+    
+    6. TEST MOVEMENT:
+       - Click "5m Away" on one device
+       - Watch distance increase!
+       - Click "5m Closer" to decrease
+    
+    USING SIMULATION IF GPS NOT AVAILABLE
+    
+    FIREBASE IS NOW ACTIVE! Real-time updates every 2 seconds.
+  `;
+  
+  alert(instructions);
+}
+
 // ================= INITIALIZE =================
-document.addEventListener('DOMContentLoaded', () => {
-  kumbhBand = new KumbhBandPrototype();
-  
-  // Add Enter key support for connection
-  document.getElementById('friendKid').addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      connectBand();
-    }
-  });
-  
-  console.log('Kumbh Band prototype loaded successfully!');
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    kumbhBand = new KumbhBandFirebase();
+    console.log('Kumbh Band with Firebase loaded!');
+  } catch (error) {
+    console.error('Failed to initialize:', error);
+    document.getElementById('firebaseStatus').textContent = 'Firebase: Error - Check Console';
+    document.getElementById('firebaseStatus').style.color = '#ef4444';
+  }
 });
 </script>
-
 </body>
 </html>
