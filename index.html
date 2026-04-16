@@ -1,986 +1,1217 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Kumbh Band - Firebase Version</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Kumbh Band – Never Get Lost</title>
+<link href="https://fonts.googleapis.com/css2?family=Tiro+Devanagari+Hindi&family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --primary: #22c55e;
-  --danger: #ef4444;
-  --warning: #f59e0b;
-  --dark: #0f172a;
-  --gray: #64748b;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  background: var(--dark);
-  color: white;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  padding: 20px;
-  min-height: 100vh;
-}
-
-.container {
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-/* Header */
-.header {
-  text-align: center;
-  margin-bottom: 30px;
-  padding: 20px;
-}
-
-.logo {
-  font-size: 2.5rem;
-  font-weight: 900;
-  color: var(--primary);
-  margin-bottom: 10px;
-}
-
-.subtitle {
-  color: var(--gray);
-  font-size: 0.9rem;
-}
-
-/* Main Display */
-.main-display {
-  background: #1e293b;
-  border-radius: 20px;
-  padding: 30px;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.distance-circle {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  border: 10px solid #475569;
-  margin: 0 auto 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.distance-circle.safe {
-  border-color: var(--primary);
-  box-shadow: 0 0 30px rgba(34, 197, 94, 0.3);
-}
-
-.distance-circle.warning {
-  border-color: var(--warning);
-  box-shadow: 0 0 30px rgba(245, 158, 11, 0.3);
-  animation: pulse 2s infinite;
-}
-
-.distance-circle.danger {
-  border-color: var(--danger);
-  box-shadow: 0 0 30px rgba(239, 68, 68, 0.3);
-  animation: pulse 1s infinite;
-}
-
-.distance-value {
-  font-size: 48px;
-  font-weight: 800;
-}
-
-.distance-unit {
-  color: var(--gray);
-  font-size: 16px;
-  margin-top: 5px;
-}
-
-.status {
-  margin-top: 15px;
-  font-size: 14px;
-  color: var(--gray);
-}
-
-/* Connection Panel */
-.connection-panel {
-  background: #1e293b;
-  border-radius: 20px;
-  padding: 25px;
-  margin-bottom: 20px;
-}
-
-.kid-section {
-  background: #0f172a;
-  border-radius: 15px;
-  padding: 20px;
-  margin-bottom: 25px;
-  text-align: center;
-}
-
-.kid-label {
-  color: var(--gray);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 10px;
-}
-
-.kid-value {
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--primary);
-  font-family: monospace;
-  letter-spacing: 2px;
-}
-
-.input-group {
-  margin-bottom: 20px;
-}
-
-.input-label {
-  display: block;
-  color: var(--gray);
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-
-.input-field {
-  width: 100%;
-  padding: 15px;
-  background: #0f172a;
-  border: 2px solid #475569;
-  border-radius: 12px;
-  color: white;
-  font-size: 16px;
-  text-align: center;
-  transition: all 0.3s;
-}
-
-.input-field:focus {
-  outline: none;
-  border-color: var(--primary);
-}
-
-/* Buttons */
-.buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-top: 25px;
-}
-
-.btn {
-  padding: 18px;
-  border: none;
-  border-radius: 15px;
-  font-size: 18px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--primary), #16a34a);
-  color: white;
-  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
-}
-
-.btn-danger {
-  background: linear-gradient(135deg, var(--danger), #dc2626);
-  color: white;
-  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
-}
-
-.btn-secondary {
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  color: white;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-}
-
-.btn-secondary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
-}
-
-/* Safe Range */
-.safe-range {
-  background: #1e293b;
-  border-radius: 20px;
-  padding: 25px;
-  margin-bottom: 20px;
-}
-
-.range-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.range-value {
-  font-size: 24px;
-  font-weight: 800;
-  color: var(--primary);
-}
-
-.range-slider {
-  width: 100%;
-  margin: 20px 0;
-}
-
-.range-labels {
-  display: flex;
-  justify-content: space-between;
-  color: var(--gray);
-  font-size: 12px;
-  margin-top: 10px;
-}
-
-/* Testing Panel */
-.testing-panel {
-  background: #1e293b;
-  border-radius: 20px;
-  padding: 25px;
-  margin-bottom: 20px;
-}
-
-.test-title {
-  color: var(--gray);
-  font-size: 14px;
-  margin-bottom: 15px;
-  text-align: center;
-}
-
-.test-buttons {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.test-btn {
-  padding: 15px;
-  background: #0f172a;
-  border: 2px solid #475569;
-  border-radius: 12px;
-  color: white;
-  cursor: pointer;
-  transition: all 0.3s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-
-.test-btn:hover {
-  background: #475569;
-  transform: translateY(-2px);
-}
-
-.test-btn .icon {
-  font-size: 24px;
-}
-
-.test-btn .label {
-  font-size: 12px;
-  color: var(--gray);
-}
-
-/* Alert */
-.alert {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--danger);
-  color: white;
-  padding: 15px 25px;
-  border-radius: 12px;
-  font-weight: 700;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-  display: none;
-  z-index: 1000;
-  max-width: 90%;
-  text-align: center;
-}
-
-/* Animations */
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
-}
-
-@keyframes slideDown {
-  from { transform: translateX(-50%) translateY(-20px); opacity: 0; }
-  to { transform: translateX(-50%) translateY(0); opacity: 1; }
-}
-
-.alert {
-  animation: slideDown 0.3s ease;
-}
-
-/* Firebase Status */
-.firebase-status {
-  background: #1e293b;
-  border-radius: 20px;
-  padding: 15px;
-  margin-top: 20px;
-  text-align: center;
-  font-size: 12px;
-  color: var(--gray);
-}
-
-/* Responsive */
-@media (max-width: 500px) {
-  .container {
-    padding: 10px;
+  :root {
+    --saffron: #FF6B00;
+    --deep-saffron: #E05500;
+    --gold: #FFB800;
+    --crimson: #C0392B;
+    --ivory: #FFF8EE;
+    --dark: #1A0A00;
+    --panel: #FFF3DC;
+    --border: #FFDBA0;
+    --safe: #2ECC71;
+    --warn: #E67E22;
+    --danger: #E74C3C;
+    --text: #3D1C00;
+    --muted: #A0724A;
   }
-  
-  .distance-circle {
-    width: 170px;
-    height: 170px;
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--dark);
+    color: var(--ivory);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
   }
-  
-  .distance-value {
-    font-size: 40px;
+
+  /* Mandala background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% -10%, rgba(255,107,0,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 90% 100%, rgba(255,184,0,0.10) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
   }
-}
+
+  .mandala-bg {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 700px;
+    height: 700px;
+    opacity: 0.04;
+    pointer-events: none;
+    z-index: 0;
+    animation: rotateMandala 60s linear infinite;
+  }
+
+  @keyframes rotateMandala {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  .app {
+    position: relative;
+    z-index: 1;
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 16px;
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding: 28px 0 20px;
+    position: relative;
+  }
+
+  .header-flame {
+    font-size: 2rem;
+    animation: flicker 2s ease-in-out infinite alternate;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  @keyframes flicker {
+    0% { transform: scaleY(1) rotate(-2deg); }
+    100% { transform: scaleY(1.1) rotate(2deg); }
+  }
+
+  .header h1 {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, var(--gold), var(--saffron));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+
+  .header-sub {
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-top: 4px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* Status badge */
+  .status-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 12px 0;
+    padding: 8px 16px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,184,0,0.15);
+    border-radius: 100px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #555;
+    transition: background 0.4s;
+    flex-shrink: 0;
+  }
+
+  .status-dot.connected { background: var(--safe); box-shadow: 0 0 8px var(--safe); animation: pulse-dot 1.5s infinite; }
+  .status-dot.connecting { background: var(--warn); animation: pulse-dot 0.8s infinite; }
+  .status-dot.disconnected { background: #555; }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* Cards */
+  .card {
+    background: rgba(255, 243, 220, 0.06);
+    border: 1px solid rgba(255,184,0,0.18);
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 14px;
+    backdrop-filter: blur(10px);
+  }
+
+  .card-title {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    margin-bottom: 14px;
+    font-family: 'DM Mono', monospace;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,184,0,0.2);
+  }
+
+  /* Band ID display */
+  .band-id-display {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,184,0,0.25);
+    border-radius: 14px;
+    padding: 14px 16px;
+  }
+
+  .band-id-icon {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+  }
+
+  .band-id-text {
+    flex: 1;
+  }
+
+  .band-id-label {
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .band-id-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+  }
+
+  .copy-btn {
+    background: rgba(255,184,0,0.12);
+    border: 1px solid rgba(255,184,0,0.3);
+    color: var(--gold);
+    border-radius: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    transition: all 0.2s;
+    font-family: 'Syne', sans-serif;
+  }
+
+  .copy-btn:hover { background: rgba(255,184,0,0.2); }
+  .copy-btn:active { transform: scale(0.95); }
+
+  /* Input + connect */
+  .connect-row {
+    display: flex;
+    gap: 10px;
+  }
+
+  .text-input {
+    flex: 1;
+    background: rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,184,0,0.25);
+    border-radius: 14px;
+    padding: 14px 16px;
+    font-family: 'DM Mono', monospace;
+    font-size: 1.1rem;
+    color: var(--ivory);
+    letter-spacing: 0.12em;
+    outline: none;
+    transition: border-color 0.2s;
+    text-transform: uppercase;
+  }
+
+  .text-input::placeholder { color: rgba(255,255,255,0.2); letter-spacing: 0.06em; font-size: 0.85rem; }
+  .text-input:focus { border-color: var(--saffron); }
+
+  .btn {
+    padding: 14px 20px;
+    border-radius: 14px;
+    border: none;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .btn:active { transform: scale(0.96); }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--saffron), var(--deep-saffron));
+    color: white;
+    box-shadow: 0 4px 20px rgba(255,107,0,0.35);
+  }
+
+  .btn-primary:hover { box-shadow: 0 6px 28px rgba(255,107,0,0.5); }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .btn-danger {
+    background: rgba(192,57,43,0.2);
+    color: var(--danger);
+    border: 1px solid rgba(192,57,43,0.4);
+  }
+
+  .btn-danger:hover { background: rgba(192,57,43,0.3); }
+
+  .btn-full { width: 100%; }
+
+  /* Distance meter */
+  .distance-hero {
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  .distance-number {
+    font-size: 4rem;
+    font-weight: 800;
+    line-height: 1;
+    transition: color 0.5s;
+    color: var(--safe);
+  }
+
+  .distance-number.warn { color: var(--warn); }
+  .distance-number.danger { color: var(--danger); animation: shake 0.3s infinite; }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+  }
+
+  .distance-unit {
+    font-size: 1rem;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    margin-top: 2px;
+    letter-spacing: 0.1em;
+  }
+
+  .distance-status-label {
+    margin-top: 10px;
+    font-size: 0.8rem;
+    padding: 5px 14px;
+    border-radius: 100px;
+    display: inline-block;
+    background: rgba(46,204,113,0.15);
+    color: var(--safe);
+    border: 1px solid rgba(46,204,113,0.3);
+    transition: all 0.4s;
+  }
+
+  .distance-status-label.warn {
+    background: rgba(230,126,34,0.15);
+    color: var(--warn);
+    border-color: rgba(230,126,34,0.3);
+  }
+
+  .distance-status-label.danger {
+    background: rgba(231,76,60,0.2);
+    color: var(--danger);
+    border-color: rgba(231,76,60,0.4);
+  }
+
+  /* Safe range slider */
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .range-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px;
+    border-radius: 2px;
+    background: rgba(255,184,0,0.2);
+    outline: none;
+    cursor: pointer;
+  }
+
+  .range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--saffron);
+    box-shadow: 0 2px 10px rgba(255,107,0,0.5);
+    cursor: pointer;
+  }
+
+  .slider-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--gold);
+    min-width: 55px;
+    text-align: right;
+  }
+
+  /* Location coords */
+  .coords-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .coord-box {
+    background: rgba(0,0,0,0.25);
+    border-radius: 10px;
+    padding: 10px 12px;
+    border: 1px solid rgba(255,184,0,0.1);
+  }
+
+  .coord-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 3px;
+  }
+
+  .coord-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--ivory);
+  }
+
+  .location-update-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 8px;
+  }
+
+  /* Emergency */
+  .emergency-btn {
+    width: 100%;
+    padding: 18px;
+    background: linear-gradient(135deg, #C0392B, #922B21);
+    border: 2px solid rgba(255,100,80,0.3);
+    border-radius: 16px;
+    color: white;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 4px 24px rgba(192,57,43,0.4);
+  }
+
+  .emergency-btn:active { transform: scale(0.97); }
+  .emergency-btn:hover { box-shadow: 0 6px 32px rgba(192,57,43,0.6); }
+
+  .navigate-btn {
+    width: 100%;
+    padding: 14px;
+    background: rgba(46,204,113,0.12);
+    border: 1px solid rgba(46,204,113,0.35);
+    border-radius: 14px;
+    color: var(--safe);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .navigate-btn:hover { background: rgba(46,204,113,0.2); }
+  .navigate-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* Alert overlay */
+  .alert-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    backdrop-filter: blur(8px);
+  }
+
+  .alert-overlay.show {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .alert-box {
+    background: #1A0A00;
+    border: 2px solid var(--danger);
+    border-radius: 24px;
+    padding: 32px 24px;
+    text-align: center;
+    max-width: 340px;
+    width: 100%;
+    box-shadow: 0 0 60px rgba(231,76,60,0.4);
+    animation: alertPop 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  }
+
+  @keyframes alertPop {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .alert-icon { font-size: 3.5rem; margin-bottom: 12px; }
+
+  .alert-title {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--danger);
+    margin-bottom: 8px;
+  }
+
+  .alert-body {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  .alert-distance {
+    font-family: 'DM Mono', monospace;
+    font-size: 2rem;
+    color: var(--danger);
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: rgba(30,15,0,0.95);
+    border: 1px solid rgba(255,184,0,0.3);
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-size: 0.85rem;
+    color: var(--ivory);
+    z-index: 2000;
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* Connected partner info */
+  .partner-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(46,204,113,0.08);
+    border: 1px solid rgba(46,204,113,0.25);
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-top: 10px;
+  }
+
+  .partner-chip-icon { font-size: 1.2rem; }
+
+  .partner-chip-text {
+    flex: 1;
+    font-size: 0.8rem;
+    color: var(--safe);
+  }
+
+  .partner-chip-id {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  /* Section divider */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,184,0,0.2), transparent);
+    margin: 8px 0 14px;
+  }
+
+  /* Hidden */
+  .hidden { display: none !important; }
+
+  /* Peer connected section */
+  #connectedSection { display: none; }
+
+  /* Blinking alert border */
+  @keyframes borderPulse {
+    0%, 100% { border-color: rgba(231,76,60,0.4); }
+    50% { border-color: rgba(231,76,60,1); }
+  }
+
+  .card.alert-active { animation: borderPulse 0.6s infinite; }
 </style>
-
-<!-- Firebase SDKs -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getFirestore, doc, setDoc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-</script>
 </head>
-
 <body>
 
-<div class="alert" id="alertBox">⚠️ Alert</div>
+<!-- Mandala SVG background -->
+<svg class="mandala-bg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="200" cy="200" r="190" fill="none" stroke="#FF6B00" stroke-width="1"/>
+  <circle cx="200" cy="200" r="150" fill="none" stroke="#FF6B00" stroke-width="0.5"/>
+  <circle cx="200" cy="200" r="110" fill="none" stroke="#FF6B00" stroke-width="1"/>
+  <circle cx="200" cy="200" r="70" fill="none" stroke="#FF6B00" stroke-width="0.5"/>
+  <circle cx="200" cy="200" r="30" fill="none" stroke="#FF6B00" stroke-width="1"/>
+  <g transform="translate(200,200)">
+    <script>/* petals */</script>
+    <!-- 16 petals outer -->
+    <g id="petals16">
+      <ellipse cx="0" cy="-160" rx="12" ry="28" fill="none" stroke="#FFB800" stroke-width="0.6"/>
+      <ellipse cx="0" cy="-160" rx="12" ry="28" fill="none" stroke="#FFB800" stroke-width="0.6" transform="rotate(22.5)"/>
+      <ellipse cx="0" cy="-160" rx="12" ry="28" fill="none" stroke="#FFB800" stroke-width="0.6" transform="rotate(45)"/>
+      <ellipse cx="0" cy="-160" rx="12" ry="28" fill="none" stroke="#FFB800" stroke-width="0.6" transform="rotate(67.5)"/>
+      <ellipse cx="0" cy="-160" rx="12" ry="28" fill="none" stroke="#FFB800" stroke-width="0.6" transform="rotate(90)"/>
+      <ellipse cx="0" cy="-160" rx="12" ry="28" fill="none" stroke="#FFB800" stroke-width="0.6" transform="rotate(112.5)"/>
+      <ellipse cx="0" cy="-160" rx="12" ry="28" fill="none" stroke="#FFB800" stroke-width="0.6" transform="rotate(135)"/>
+      <ellipse cx="0" cy="-160" rx="12" ry="28" fill="none" stroke="#FFB800" stroke-width="0.6" transform="rotate(157.5)"/>
+      <ellipse cx="0" cy="-160" rx="12" ry="28" fill="none" stroke="#FFB800" stroke-width="0.6" transform="rotate(180)"/>
+      <ellipse cx="0" cy="-160" rx="12" ry="28" fill="none" stroke="#FFB800" stroke-width="0.6" transform="rotate(202.5)"/>
+      <ellipse cx="0" cy="-160" rx="12" ry="28" fill="none" stroke="#FFB800" stroke-width="0.6" transform="rotate(225)"/>
+      <ellipse cx="0" cy="-160" rx="12" ry="28" fill="none" stroke="#FFB800" stroke-width="0.6" transform="rotate(247.5)"/>
+      <ellipse cx="0" cy="-160" rx="12" ry="28" fill="none" stroke="#FFB800" stroke-width="0.6" transform="rotate(270)"/>
+      <ellipse cx="0" cy="-160" rx="12" ry="28" fill="none" stroke="#FFB800" stroke-width="0.6" transform="rotate(292.5)"/>
+      <ellipse cx="0" cy="-160" rx="12" ry="28" fill="none" stroke="#FFB800" stroke-width="0.6" transform="rotate(315)"/>
+      <ellipse cx="0" cy="-160" rx="12" ry="28" fill="none" stroke="#FFB800" stroke-width="0.6" transform="rotate(337.5)"/>
+    </g>
+    <!-- 8 petals inner -->
+    <ellipse cx="0" cy="-110" rx="10" ry="22" fill="none" stroke="#FF6B00" stroke-width="0.7"/>
+    <ellipse cx="0" cy="-110" rx="10" ry="22" fill="none" stroke="#FF6B00" stroke-width="0.7" transform="rotate(45)"/>
+    <ellipse cx="0" cy="-110" rx="10" ry="22" fill="none" stroke="#FF6B00" stroke-width="0.7" transform="rotate(90)"/>
+    <ellipse cx="0" cy="-110" rx="10" ry="22" fill="none" stroke="#FF6B00" stroke-width="0.7" transform="rotate(135)"/>
+    <ellipse cx="0" cy="-110" rx="10" ry="22" fill="none" stroke="#FF6B00" stroke-width="0.7" transform="rotate(180)"/>
+    <ellipse cx="0" cy="-110" rx="10" ry="22" fill="none" stroke="#FF6B00" stroke-width="0.7" transform="rotate(225)"/>
+    <ellipse cx="0" cy="-110" rx="10" ry="22" fill="none" stroke="#FF6B00" stroke-width="0.7" transform="rotate(270)"/>
+    <ellipse cx="0" cy="-110" rx="10" ry="22" fill="none" stroke="#FF6B00" stroke-width="0.7" transform="rotate(315)"/>
+    <!-- dots -->
+    <circle cx="0" cy="-70" r="3" fill="#FFB800" opacity="0.6"/>
+    <circle cx="0" cy="-70" r="3" fill="#FFB800" opacity="0.6" transform="rotate(45)"/>
+    <circle cx="0" cy="-70" r="3" fill="#FFB800" opacity="0.6" transform="rotate(90)"/>
+    <circle cx="0" cy="-70" r="3" fill="#FFB800" opacity="0.6" transform="rotate(135)"/>
+    <circle cx="0" cy="-70" r="3" fill="#FFB800" opacity="0.6" transform="rotate(180)"/>
+    <circle cx="0" cy="-70" r="3" fill="#FFB800" opacity="0.6" transform="rotate(225)"/>
+    <circle cx="0" cy="-70" r="3" fill="#FFB800" opacity="0.6" transform="rotate(270)"/>
+    <circle cx="0" cy="-70" r="3" fill="#FFB800" opacity="0.6" transform="rotate(315)"/>
+  </g>
+</svg>
 
-<div class="container">
+<div class="app">
+
   <!-- Header -->
   <div class="header">
-    <div class="logo">KUMBH BAND</div>
-    <div class="subtitle">Firebase Real-time Tracking</div>
+    <span class="header-flame">🪔</span>
+    <h1>KUMBH BAND</h1>
+    <div class="header-sub">Real-time Group Safety Tracker</div>
   </div>
 
-  <!-- Main Display -->
-  <div class="main-display">
-    <div class="distance-circle" id="distanceCircle">
-      <div class="distance-value" id="distanceValue">--</div>
-      <div class="distance-unit">meters</div>
-    </div>
-    <div class="status" id="statusText">Disconnected</div>
+  <!-- Connection status -->
+  <div class="status-bar">
+    <div class="status-dot disconnected" id="statusDot"></div>
+    <span id="statusText">Not connected</span>
   </div>
 
-  <!-- Connection Panel -->
-  <div class="connection-panel">
-    <div class="kid-section">
-      <div class="kid-label">Your Band ID</div>
-      <div class="kid-value" id="myKid">Loading...</div>
-    </div>
-    
-    <div class="input-group">
-      <label class="input-label">Enter Friend's Band ID</label>
-      <input type="text" class="input-field" id="friendKid" placeholder="K-1234" maxlength="6">
-    </div>
-    
-    <div class="buttons">
-      <button class="btn btn-primary" id="connectBtn" onclick="connectWithFirebase()">CONNECT</button>
-      <button class="btn btn-secondary" onclick="showInstructions()">HOW TO TEST</button>
+  <!-- Band ID Card -->
+  <div class="card">
+    <div class="card-title">📿 Your Band ID</div>
+    <div class="band-id-display">
+      <div class="band-id-icon">🎋</div>
+      <div class="band-id-text">
+        <div class="band-id-label">Your unique ID</div>
+        <div class="band-id-value" id="myBandId">Generating…</div>
+      </div>
+      <button class="copy-btn" onclick="copyId()">Copy</button>
     </div>
   </div>
 
-  <!-- Safe Range -->
-  <div class="safe-range">
-    <div class="range-header">
-      <span class="range-label">Safe Distance</span>
-      <span class="range-value" id="safeRangeValue">50</span>
+  <!-- Connect Card -->
+  <div class="card" id="connectCard">
+    <div class="card-title">🔗 Connect to Partner</div>
+    <div class="connect-row">
+      <input type="text" class="text-input" id="partnerIdInput" placeholder="Enter partner ID…" maxlength="6" oninput="this.value=this.value.toUpperCase()">
+      <button class="btn btn-primary" id="connectBtn" onclick="connectToPartner()">Connect</button>
     </div>
-    <input type="range" min="10" max="100" value="50" class="range-slider" id="safeRangeSlider" 
-           oninput="updateSafeRange(this.value)">
-    <div class="range-labels">
-      <span>10m</span>
-      <span>100m</span>
-    </div>
+    <div id="connectStatus" style="margin-top:10px; font-size:0.8rem; color:var(--muted); text-align:center;"></div>
   </div>
 
-  <!-- Testing Panel -->
-  <div class="testing-panel">
-    <div class="test-title">Test Movement Simulation</div>
-    <div class="test-buttons">
-      <button class="test-btn" onclick="simulateMovement(-5)">
-        <span class="icon">⬇️</span>
-        <span class="label">5m Closer</span>
+  <!-- Connected Section -->
+  <div id="connectedSection">
+
+    <!-- Partner chip -->
+    <div class="partner-chip" id="partnerChip">
+      <div class="partner-chip-icon">🧑‍🤝‍🧑</div>
+      <div class="partner-chip-text">Connected to</div>
+      <div class="partner-chip-id" id="partnerChipId">—</div>
+      <button class="btn btn-danger" style="padding:6px 12px; font-size:0.75rem;" onclick="disconnect()">Disconnect</button>
+    </div>
+
+    <!-- Distance Card -->
+    <div class="card" id="distanceCard" style="margin-top:14px;">
+      <div class="card-title">📡 Live Distance</div>
+      <div class="distance-hero">
+        <div class="distance-number" id="distanceNumber">—</div>
+        <div class="distance-unit">metres apart</div>
+        <div class="distance-status-label" id="distanceLabel">Waiting for GPS…</div>
+      </div>
+    </div>
+
+    <!-- Safe Range Card -->
+    <div class="card">
+      <div class="card-title">🛡️ Safe Range</div>
+      <div class="slider-row">
+        <span style="font-size:0.8rem; color:var(--muted);">10m</span>
+        <input type="range" class="range-slider" id="safeRange" min="10" max="1000" step="10" value="500" oninput="updateSafeRange(this.value)">
+        <span style="font-size:0.8rem; color:var(--muted);">1km</span>
+        <span class="slider-value" id="safeRangeLabel">500m</span>
+      </div>
+    </div>
+
+    <!-- Location Card -->
+    <div class="card">
+      <div class="card-title">📍 Location Info</div>
+      <div class="coords-grid">
+        <div class="coord-box">
+          <div class="coord-label">Your Lat</div>
+          <div class="coord-value" id="myLat">—</div>
+        </div>
+        <div class="coord-box">
+          <div class="coord-label">Your Lng</div>
+          <div class="coord-value" id="myLng">—</div>
+        </div>
+        <div class="coord-box">
+          <div class="coord-label">Partner Lat</div>
+          <div class="coord-value" id="partnerLat">—</div>
+        </div>
+        <div class="coord-box">
+          <div class="coord-label">Partner Lng</div>
+          <div class="coord-value" id="partnerLng">—</div>
+        </div>
+      </div>
+      <div class="location-update-time" id="lastUpdate">GPS: waiting…</div>
+    </div>
+
+    <!-- Emergency Card -->
+    <div class="card">
+      <div class="card-title">🚨 Emergency</div>
+      <button class="emergency-btn" onclick="callEmergency()">
+        🆘 SEND SOS + ALERT PARTNER
       </button>
-      <button class="test-btn" onclick="simulateMovement(5)">
-        <span class="icon">⬆️</span>
-        <span class="label">5m Away</span>
-      </button>
-      <button class="test-btn" onclick="simulateMovement(-20)">
-        <span class="icon">⏬</span>
-        <span class="label">20m Closer</span>
-      </button>
-      <button class="test-btn" onclick="simulateMovement(20)">
-        <span class="icon">⏫</span>
-        <span class="label">20m Away</span>
+      <button class="navigate-btn" id="navigateBtn" onclick="navigateToPartner()" disabled>
+        🗺️ Navigate to Partner
       </button>
     </div>
-    <div class="test-title" id="simulationStatus">Simulation: OFF</div>
+
   </div>
 
-  <div class="firebase-status" id="firebaseStatus">
-    Firebase: Connecting...
+  <div style="height: 30px;"></div>
+</div>
+
+<!-- Alert Overlay -->
+<div class="alert-overlay" id="alertOverlay">
+  <div class="alert-box">
+    <div class="alert-icon" id="alertIcon">⚠️</div>
+    <div class="alert-title" id="alertTitle">Distance Alert!</div>
+    <div class="alert-distance" id="alertDistance">—</div>
+    <div class="alert-body" id="alertBody">You have moved too far from your partner.</div>
+    <button class="btn btn-primary btn-full" onclick="dismissAlert()" style="margin-top: 4px;">OK, Got it</button>
   </div>
 </div>
 
-<script type="module">
-// ================= FIREBASE CONFIGURATION =================
-const firebaseConfig = {
-  apiKey: "AIzaSyDVV1zZZDAnqOkmNXKW0ipJXatUYtjV4W4",
-  authDomain: "kumbh-band-dd624.firebaseapp.com",
-  projectId: "kumbh-band-dd624",
-  storageBucket: "kumbh-band-dd624.appspot.com",
-  messagingSenderId: "153944613096",
-  appId: "1:153944613096:web:0c5fe544c93803c2c01902"
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+//  KUMBH BAND – Client-side P2P via PeerJS (no server needed)
+// ============================================================
+
+const PEERJS_CONFIG = {
+  host: 'peerjs.com',
+  port: 443,
+  path: '/',
+  secure: true,
+  debug: 0,
+  config: {
+    iceServers: [
+      { urls: 'stun:stun.l.google.com:19302' },
+      { urls: 'stun:stun1.l.google.com:19302' }
+    ]
+  }
 };
 
-// Initialize Firebase
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, doc, setDoc, onSnapshot, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+let peer = null;
+let conn = null;
+let myId = null;
+let myLat = null, myLng = null;
+let partnerLat = null, partnerLng = null;
+let safeRange = 500;
+let watchId = null;
+let locationInterval = null;
+let alertShown = false;
+let partnerConnectedId = null;
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+// --- Generate readable ID ---
+function generateId() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let id = '';
+  for (let i = 0; i < 6; i++) id += chars[Math.floor(Math.random() * chars.length)];
+  return id;
+}
 
-console.log("Firebase initialized successfully!");
+// --- Init PeerJS ---
+function initPeer() {
+  const bandId = generateId();
+  document.getElementById('myBandId').textContent = bandId;
+  setStatus('connecting', 'Connecting to network…');
 
-// ================= KUMBH BAND CLASS =================
-class KumbhBandFirebase {
-  constructor() {
-    this.myKid = '';
-    this.friendKid = '';
-    this.isConnected = false;
-    this.safeRange = 50;
-    this.myLocation = null;
-    this.friendLocation = null;
-    this.simulationOffset = 0;
-    this.watchId = null;
-    this.unsubscribe = null;
-    this.locationInterval = null;
-    
-    // Firebase references
-    this.myDocRef = null;
-    this.friendDocRef = null;
-    this.pairRef = null;
-    
-    this.initialize();
-  }
-  
-  async initialize() {
-    console.log("Initializing Kumbh Band with Firebase...");
-    
-    // 1. Generate K-ID
-    await this.generateKid();
-    
-    // 2. Setup UI
-    this.setupUI();
-    
-    // 3. Update Firebase status
-    this.updateFirebaseStatus('Connected');
-    
-    // 4. Listen for connections to me
-    this.listenForConnections();
-    
-    console.log(`Kumbh Band ready! Your ID: ${this.myKid}`);
-  }
-  
-  async generateKid() {
-    // Try to get existing K-ID from localStorage
-    let savedKid = localStorage.getItem('kumbh_kid_firebase');
-    
-    if (!savedKid) {
-      // Generate new K-ID and check Firebase for uniqueness
-      let isUnique = false;
-      let attempts = 0;
-      
-      while (!isUnique && attempts < 10) {
-        savedKid = 'K-' + Math.floor(1000 + Math.random() * 9000);
-        
-        try {
-          // Check if this K-ID exists in Firebase
-          const bandDoc = doc(db, 'bands', savedKid);
-          // We'll assume it's unique for now (in real app, we'd check)
-          isUnique = true;
-        } catch (error) {
-          attempts++;
-          console.log(`Checking K-ID ${savedKid}...`);
-        }
-      }
-      
-      if (savedKid) {
-        localStorage.setItem('kumbh_kid_firebase', savedKid);
-      } else {
-        // Fallback to timestamp based
-        savedKid = 'K-' + Date.now().toString().slice(-4);
-        localStorage.setItem('kumbh_kid_firebase', savedKid);
-      }
-    }
-    
-    this.myKid = savedKid;
-    document.getElementById('myKid').textContent = this.myKid;
-    
-    // Create/update my document in Firebase
-    this.myDocRef = doc(db, 'bands', this.myKid);
-    await this.updateMyFirebaseData();
-    
-    // Load saved friend
-    this.friendKid = localStorage.getItem('kumbh_friend_firebase') || '';
-    document.getElementById('friendKid').value = this.friendKid;
-    
-    // Load safe range
-    const savedRange = localStorage.getItem('kumbh_range_firebase');
-    if (savedRange) {
-      this.safeRange = parseInt(savedRange);
-      document.getElementById('safeRangeValue').textContent = this.safeRange;
-      document.getElementById('safeRangeSlider').value = this.safeRange;
-    }
-  }
-  
-  async updateMyFirebaseData() {
-    if (!this.myDocRef) return;
-    
-    const data = {
-      kid: this.myKid,
-      location: this.myLocation || this.getDefaultLocation(),
-      connectedTo: this.friendKid,
-      status: this.isConnected ? 'connected' : 'disconnected',
-      lastUpdate: new Date().toISOString(),
-      safeRange: this.safeRange
-    };
-    
-    try {
-      await setDoc(this.myDocRef, data, { merge: true });
-      console.log('Updated my data in Firebase');
-    } catch (error) {
-      console.error('Error updating Firebase:', error);
-    }
-  }
-  
-  getDefaultLocation() {
-    // Default location near Prayagraj
-    return {
-      lat: 25.4358 + (Math.random() - 0.5) * 0.01,
-      lng: 81.8463 + (Math.random() - 0.5) * 0.01,
-      accuracy: 10,
-      simulated: true
-    };
-  }
-  
-  setupUI() {
-    const friendInput = document.getElementById('friendKid');
-    
-    // Enter key to connect
-    friendInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') this.connect();
+  // Load PeerJS dynamically
+  const script = document.createElement('script');
+  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.2/peerjs.min.js';
+  script.onload = () => {
+    peer = new Peer(bandId, PEERJS_CONFIG);
+
+    peer.on('open', (id) => {
+      myId = id;
+      document.getElementById('myBandId').textContent = id;
+      setStatus('disconnected', 'Ready — share your ID');
+      showToast('✅ Band ID ready! Share it with your group.');
     });
-    
-    // Save friend when typing
-    friendInput.addEventListener('input', (e) => {
-      localStorage.setItem('kumbh_friend_firebase', e.target.value);
+
+    peer.on('connection', (c) => {
+      handleConnection(c);
     });
-    
-    // Start location updates
-    this.startLocationUpdates();
-  }
-  
-  startLocationUpdates() {
-    if (navigator.geolocation) {
-      // Get initial location
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          this.myLocation = {
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude,
-            accuracy: pos.coords.accuracy,
-            timestamp: Date.now()
-          };
-          this.updateMyFirebaseData();
-        },
-        () => {
-          this.myLocation = this.getDefaultLocation();
-          this.updateMyFirebaseData();
-        }
-      );
-      
-      // Watch for changes
-      this.watchId = navigator.geolocation.watchPosition(
-        (pos) => {
-          this.myLocation = {
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude,
-            accuracy: pos.coords.accuracy,
-            timestamp: Date.now()
-          };
-          this.updateMyFirebaseData();
-          
-          if (this.isConnected) {
-            this.calculateDistance();
-          }
-        },
-        (error) => {
-          console.log('GPS error, using simulation:', error);
-          this.myLocation = this.getDefaultLocation();
-          this.updateMyFirebaseData();
-        },
-        {
-          enableHighAccuracy: true,
-          maximumAge: 10000,
-          timeout: 15000
-        }
-      );
-    } else {
-      // No GPS, use simulation
-      this.myLocation = this.getDefaultLocation();
-      this.updateMyFirebaseData();
-      
-      // Update location periodically
-      this.locationInterval = setInterval(() => {
-        this.myLocation.lat += (Math.random() - 0.5) * 0.0001;
-        this.myLocation.lng += (Math.random() - 0.5) * 0.0001;
-        this.myLocation.timestamp = Date.now();
-        this.updateMyFirebaseData();
-        
-        if (this.isConnected) {
-          this.calculateDistance();
-        }
-      }, 5000);
-    }
-  }
-  
-  listenForConnections() {
-    // Listen for changes to my document
-    this.unsubscribe = onSnapshot(this.myDocRef, (doc) => {
-      if (doc.exists()) {
-        const data = doc.data();
-        
-        // Check if someone is trying to connect to me
-        if (data.connectedTo && data.connectedTo !== this.friendKid) {
-          // Someone wants to connect to me
-          this.showAlert(`${data.connectedTo} wants to connect with you!`);
-        }
+
+    peer.on('error', (err) => {
+      console.error('PeerJS error:', err);
+      if (err.type === 'unavailable-id') {
+        // Retry with new ID
+        const newId = generateId();
+        document.getElementById('myBandId').textContent = newId;
+        peer = new Peer(newId, PEERJS_CONFIG);
+      } else if (err.type === 'network' || err.type === 'server-error') {
+        setStatus('disconnected', 'Network error – retry');
+        showToast('⚠️ Connection issue. Check internet.');
+        fallbackMode();
       }
     });
-  }
-  
-  async connect() {
-    const input = document.getElementById('friendKid');
-    this.friendKid = input.value.trim().toUpperCase();
-    
-    if (!this.friendKid) {
-      this.showAlert('Please enter a K-ID');
-      return;
-    }
-    
-    if (this.friendKid === this.myKid) {
-      this.showAlert('Cannot connect to yourself');
-      return;
-    }
-    
-    if (!this.friendKid.match(/^K-\d{4}$/)) {
-      this.showAlert('Use format: K-1234');
-      return;
-    }
-    
-    // Save friend
-    localStorage.setItem('kumbh_friend_firebase', this.friendKid);
-    
-    // Update my data with connection
-    this.isConnected = true;
-    await this.updateMyFirebaseData();
-    
-    // Create a pair ID for easier tracking
-    const pairId = [this.myKid, this.friendKid].sort().join('_');
-    this.pairRef = doc(db, 'pairs', pairId);
-    
-    // Update UI
-    this.updateUIForConnection();
-    
-    // Listen for friend's location
-    this.listenToFriend();
-    
-    this.showAlert(`Connecting to ${this.friendKid}...`);
-  }
-  
-  updateUIForConnection() {
-    const connectBtn = document.getElementById('connectBtn');
-    connectBtn.textContent = 'DISCONNECT';
-    connectBtn.className = 'btn btn-danger';
-    connectBtn.onclick = () => this.disconnect();
-    document.getElementById('statusText').textContent = `Connecting to ${this.friendKid}...`;
-  }
-  
-  async listenToFriend() {
-    // Listen to friend's document
-    this.friendDocRef = doc(db, 'bands', this.friendKid);
-    
-    onSnapshot(this.friendDocRef, (doc) => {
-      if (!doc.exists()) {
-        document.getElementById('statusText').textContent = `${this.friendKid} not found`;
-        return;
-      }
-      
-      const friendData = doc.data();
-      this.friendLocation = friendData.location;
-      
-      // Check if friend is also connected to me
-      if (friendData.connectedTo === this.myKid) {
-        // MUTUAL CONNECTION ESTABLISHED!
-        document.getElementById('statusText').textContent = `Connected to ${this.friendKid}`;
-        this.calculateDistance();
-      } else {
-        document.getElementById('statusText').textContent = `Waiting for ${this.friendKid} to connect back...`;
-      }
+
+    peer.on('disconnected', () => {
+      setStatus('disconnected', 'Disconnected');
+      setTimeout(() => peer && peer.reconnect(), 3000);
     });
-  }
-  
-  calculateDistance() {
-    if (!this.myLocation || !this.friendLocation) {
-      document.getElementById('distanceValue').textContent = '--';
-      return;
-    }
-    
-    // Calculate actual distance
-    let distance = this.haversineDistance(
-      this.myLocation.lat,
-      this.myLocation.lng,
-      this.friendLocation.lat,
-      this.friendLocation.lng
-    );
-    
-    // Add simulation offset
-    distance = Math.max(1, Math.round(distance + this.simulationOffset));
-    
-    // Update display
-    document.getElementById('distanceValue').textContent = distance;
-    
-    // Update circle color
-    this.updateCircleColor(distance);
-    
-    // Update pair document with distance
-    this.updatePairDistance(distance);
-  }
-  
-  haversineDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371000; // Earth's radius in meters
-    const φ1 = lat1 * Math.PI / 180;
-    const φ2 = lat2 * Math.PI / 180;
-    const Δφ = (lat2 - lat1) * Math.PI / 180;
-    const Δλ = (lon2 - lon1) * Math.PI / 180;
-    
-    const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
-              Math.cos(φ1) * Math.cos(φ2) *
-              Math.sin(Δλ/2) * Math.sin(Δλ/2);
-    
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    return R * c;
-  }
-  
-  updateCircleColor(distance) {
-    const circle = document.getElementById('distanceCircle');
-    circle.className = 'distance-circle';
-    
-    if (distance <= this.safeRange) {
-      circle.classList.add('safe');
-      document.getElementById('statusText').textContent = `Connected (${distance}m)`;
-    } else if (distance <= this.safeRange * 1.5) {
-      circle.classList.add('warning');
-      document.getElementById('statusText').textContent = `⚠️ Warning: ${distance}m`;
-      this.vibrate();
-    } else {
-      circle.classList.add('danger');
-      document.getElementById('statusText').textContent = `🚨 Danger: ${distance}m AWAY!`;
-      this.vibrate(true);
-    }
-  }
-  
-  async updatePairDistance(distance) {
-    if (!this.pairRef) return;
-    
-    try {
-      await setDoc(this.pairRef, {
-        user1: this.myKid,
-        user2: this.friendKid,
-        distance: distance,
-        timestamp: new Date().toISOString()
-      }, { merge: true });
-    } catch (error) {
-      console.error('Error updating pair:', error);
-    }
-  }
-  
-  async disconnect() {
-    this.isConnected = false;
-    this.friendKid = '';
-    
-    // Update UI
-    const connectBtn = document.getElementById('connectBtn');
-    connectBtn.textContent = 'CONNECT';
-    connectBtn.className = 'btn btn-primary';
-    connectBtn.onclick = () => this.connect();
-    document.getElementById('statusText').textContent = 'Disconnected';
-    document.getElementById('distanceValue').textContent = '--';
-    document.getElementById('distanceCircle').className = 'distance-circle';
-    
-    // Clear friend input
-    document.getElementById('friendKid').value = '';
-    localStorage.removeItem('kumbh_friend_firebase');
-    
-    // Update Firebase
-    await this.updateMyFirebaseData();
-    
-    // Reset simulation
-    this.simulationOffset = 0;
-    document.getElementById('simulationStatus').textContent = 'Simulation: OFF';
-    
-    this.showAlert('Disconnected');
-  }
-  
-  simulateMovement(change) {
-    if (!this.isConnected) {
-      this.showAlert('Connect first to simulate');
-      return;
-    }
-    
-    this.simulationOffset += change;
-    document.getElementById('simulationStatus').textContent = 
-      `Simulation: ${this.simulationOffset >= 0 ? '+' : ''}${this.simulationOffset}m`;
-    
-    this.calculateDistance();
-    
-    if (Math.abs(change) >= 20) {
-      const dir = change > 0 ? 'farther' : 'closer';
-      this.showAlert(`Simulated moving ${Math.abs(change)}m ${dir}`);
-    }
-  }
-  
-  updateSafeRange(value) {
-    this.safeRange = parseInt(value);
-    document.getElementById('safeRangeValue').textContent = this.safeRange;
-    localStorage.setItem('kumbh_range_firebase', this.safeRange.toString());
-    
-    if (this.isConnected && this.myLocation && this.friendLocation) {
-      this.calculateDistance();
-    }
-  }
-  
-  vibrate(strong = false) {
-    if (navigator.vibrate) {
-      navigator.vibrate(strong ? [200,100,200,100,200] : [100,50,100]);
-    }
-  }
-  
-  showAlert(message) {
-    const alertBox = document.getElementById('alertBox');
-    alertBox.textContent = message;
-    alertBox.style.display = 'block';
-    
-    setTimeout(() => {
-      alertBox.style.display = 'none';
-    }, 3000);
-  }
-  
-  updateFirebaseStatus(status) {
-    document.getElementById('firebaseStatus').textContent = `Firebase: ${status}`;
-  }
+  };
+
+  script.onerror = () => {
+    showToast('⚠️ PeerJS failed to load. Using demo mode.');
+    document.getElementById('myBandId').textContent = bandId;
+    myId = bandId;
+    setStatus('disconnected', 'Demo mode active');
+    fallbackMode();
+  };
+
+  document.head.appendChild(script);
 }
 
-// ================= GLOBAL FUNCTIONS =================
-let kumbhBand = null;
-
-async function connectWithFirebase() {
-  if (kumbhBand) {
-    await kumbhBand.connect();
-  }
-}
-
-function updateSafeRange(value) {
-  if (kumbhBand) {
-    kumbhBand.updateSafeRange(value);
-  }
-}
-
-function simulateMovement(change) {
-  if (kumbhBand) {
-    kumbhBand.simulateMovement(change);
-  }
-}
-
-function showInstructions() {
-  const instructions = `
-    HOW TO TEST WITH 2 DEVICES:
-    
-    1. OPEN THIS LINK IN TWO DIFFERENT BROWSERS
-       (Chrome & Firefox, or Chrome & Safari)
-    
-    2. NOTE THE K-IDs:
-       - Device 1: Shows K-1234 (example)
-       - Device 2: Shows K-5678 (example)
-    
-    3. ON DEVICE 1:
-       - Enter K-5678 in friend field
-       - Click CONNECT
-    
-    4. ON DEVICE 2:
-       - Enter K-1234 in friend field
-       - Click CONNECT
-    
-    5. WAIT FOR CONNECTION:
-       - Both will show "Connected"
-       - Distance will appear (20-50m initially)
-    
-    6. TEST MOVEMENT:
-       - Click "5m Away" on one device
-       - Watch distance increase!
-       - Click "5m Closer" to decrease
-    
-    USING SIMULATION IF GPS NOT AVAILABLE
-    
-    FIREBASE IS NOW ACTIVE! Real-time updates every 2 seconds.
-  `;
-  
-  alert(instructions);
-}
-
-// ================= INITIALIZE =================
-document.addEventListener('DOMContentLoaded', async () => {
+// --- Fallback: BroadcastChannel for same-device testing ---
+let broadcastChannel = null;
+function fallbackMode() {
   try {
-    kumbhBand = new KumbhBandFirebase();
-    console.log('Kumbh Band with Firebase loaded!');
-  } catch (error) {
-    console.error('Failed to initialize:', error);
-    document.getElementById('firebaseStatus').textContent = 'Firebase: Error - Check Console';
-    document.getElementById('firebaseStatus').style.color = '#ef4444';
+    broadcastChannel = new BroadcastChannel('kumbh-band-channel');
+    broadcastChannel.onmessage = (e) => handleBroadcastMessage(e.data);
+    showToast('📻 Demo mode: open two tabs to test');
+  } catch (e) {}
+}
+
+function handleBroadcastMessage(data) {
+  if (data.type === 'connect-request' && data.to === myId && !conn) {
+    partnerConnectedId = data.from;
+    broadcastChannel.postMessage({ type: 'connect-accept', to: data.from, from: myId });
+    onConnected(data.from, 'broadcast');
   }
-});
+  if (data.type === 'connect-accept' && data.to === myId) {
+    partnerConnectedId = data.from;
+    onConnected(data.from, 'broadcast');
+  }
+  if (data.type === 'location' && data.to === myId) {
+    receivePartnerLocation(data.lat, data.lng);
+  }
+  if (data.type === 'sos' && data.to === myId) {
+    showAlert('🆘 SOS from Partner!', 'YOUR PARTNER HAS SENT AN SOS. Find them immediately!', 'sos');
+  }
+}
+
+// --- Connect to partner ---
+function connectToPartner() {
+  const inputId = document.getElementById('partnerIdInput').value.trim().toUpperCase();
+
+  if (!inputId || inputId.length < 4) {
+    showToast('⚠️ Enter a valid Band ID');
+    return;
+  }
+
+  if (inputId === myId) {
+    showToast('⚠️ Cannot connect to yourself');
+    return;
+  }
+
+  document.getElementById('connectBtn').disabled = true;
+  document.getElementById('connectStatus').textContent = 'Connecting…';
+  setStatus('connecting', 'Connecting to ' + inputId + '…');
+
+  if (peer && peer.open) {
+    // PeerJS available
+    const c = peer.connect(inputId, { reliable: true });
+
+    c.on('open', () => {
+      handleConnection(c);
+    });
+
+    c.on('error', (err) => {
+      document.getElementById('connectBtn').disabled = false;
+      document.getElementById('connectStatus').textContent = 'Failed to connect. Check the ID.';
+      setStatus('disconnected', 'Connection failed');
+      showToast('❌ Could not connect. Check the ID and try again.');
+    });
+
+    // Timeout
+    setTimeout(() => {
+      if (!conn) {
+        document.getElementById('connectBtn').disabled = false;
+        document.getElementById('connectStatus').textContent = 'Timeout. Make sure partner has app open.';
+        setStatus('disconnected', 'Timed out');
+        showToast('⏱️ Timeout. Make sure partner is on the app.');
+      }
+    }, 15000);
+
+  } else if (broadcastChannel) {
+    // BroadcastChannel fallback
+    broadcastChannel.postMessage({ type: 'connect-request', to: inputId, from: myId });
+    document.getElementById('connectStatus').textContent = 'Request sent (demo mode)…';
+    setTimeout(() => {
+      if (!partnerConnectedId) {
+        document.getElementById('connectBtn').disabled = false;
+        document.getElementById('connectStatus').textContent = 'No response. Is the other tab open?';
+        setStatus('disconnected', 'No response');
+      }
+    }, 8000);
+  } else {
+    showToast('⚠️ Not ready yet. Wait a moment and try again.');
+    document.getElementById('connectBtn').disabled = false;
+  }
+}
+
+function handleConnection(c) {
+  conn = c;
+  partnerConnectedId = c.peer;
+
+  c.on('open', () => {
+    onConnected(c.peer, 'peer');
+  });
+
+  c.on('data', (data) => {
+    if (data.type === 'location') {
+      receivePartnerLocation(data.lat, data.lng);
+    }
+    if (data.type === 'sos') {
+      showAlert('🆘 SOS from Partner!', 'Your partner sent an SOS. Go find them NOW!', 'sos');
+    }
+  });
+
+  c.on('close', () => {
+    onDisconnected();
+  });
+
+  c.on('error', (err) => {
+    console.error('Connection error:', err);
+    onDisconnected();
+  });
+}
+
+function onConnected(partnerId, mode) {
+  partnerConnectedId = partnerId;
+  setStatus('connected', 'Connected to ' + partnerId);
+  document.getElementById('partnerChipId').textContent = partnerId;
+  document.getElementById('connectCard').style.display = 'none';
+  document.getElementById('connectedSection').style.display = 'block';
+  showToast('✅ Connected to ' + partnerId + '!');
+  startLocationTracking();
+}
+
+function onDisconnected() {
+  conn = null;
+  partnerConnectedId = null;
+  setStatus('disconnected', 'Disconnected');
+  document.getElementById('connectCard').style.display = 'block';
+  document.getElementById('connectedSection').style.display = 'none';
+  document.getElementById('connectBtn').disabled = false;
+  document.getElementById('connectStatus').textContent = '';
+  document.getElementById('partnerIdInput').value = '';
+  stopLocationTracking();
+  showToast('🔌 Partner disconnected.');
+  alertShown = false;
+}
+
+function disconnect() {
+  if (conn) conn.close();
+  onDisconnected();
+}
+
+// --- GPS Tracking ---
+function startLocationTracking() {
+  if (!navigator.geolocation) {
+    showToast('⚠️ Geolocation not supported on this browser.');
+    return;
+  }
+
+  const options = { enableHighAccuracy: true, maximumAge: 5000, timeout: 15000 };
+
+  watchId = navigator.geolocation.watchPosition(
+    (pos) => {
+      myLat = pos.coords.latitude;
+      myLng = pos.coords.longitude;
+      document.getElementById('myLat').textContent = myLat.toFixed(5);
+      document.getElementById('myLng').textContent = myLng.toFixed(5);
+      document.getElementById('lastUpdate').textContent = 'Updated: ' + new Date().toLocaleTimeString();
+      sendLocationToPartner();
+      if (partnerLat !== null) calculateAndShowDistance();
+    },
+    (err) => {
+      console.warn('GPS error:', err.message);
+      document.getElementById('lastUpdate').textContent = 'GPS: ' + err.message;
+      if (err.code === 1) showToast('📍 Location permission denied. Please allow.');
+    },
+    options
+  );
+
+  // Also send on interval
+  locationInterval = setInterval(() => {
+    if (myLat !== null) sendLocationToPartner();
+  }, 5000);
+}
+
+function stopLocationTracking() {
+  if (watchId !== null) navigator.geolocation.clearWatch(watchId);
+  if (locationInterval) clearInterval(locationInterval);
+  watchId = null;
+  locationInterval = null;
+}
+
+function sendLocationToPartner() {
+  if (myLat === null) return;
+  const payload = { type: 'location', lat: myLat, lng: myLng };
+
+  if (conn && conn.open) {
+    try { conn.send(payload); } catch(e) {}
+  } else if (broadcastChannel && partnerConnectedId) {
+    broadcastChannel.postMessage({ ...payload, to: partnerConnectedId, from: myId });
+  }
+}
+
+function receivePartnerLocation(lat, lng) {
+  partnerLat = lat;
+  partnerLng = lng;
+  document.getElementById('partnerLat').textContent = lat.toFixed(5);
+  document.getElementById('partnerLng').textContent = lng.toFixed(5);
+  document.getElementById('navigateBtn').disabled = false;
+  if (myLat !== null) calculateAndShowDistance();
+}
+
+// --- Haversine distance ---
+function haversine(lat1, lng1, lat2, lng2) {
+  const R = 6371000; // Earth radius in metres
+  const φ1 = lat1 * Math.PI / 180;
+  const φ2 = lat2 * Math.PI / 180;
+  const Δφ = (lat2 - lat1) * Math.PI / 180;
+  const Δλ = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(Δφ/2)**2 + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function calculateAndShowDistance() {
+  const dist = haversine(myLat, myLng, partnerLat, partnerLng);
+  const distRounded = Math.round(dist);
+
+  const numEl = document.getElementById('distanceNumber');
+  const labelEl = document.getElementById('distanceLabel');
+  const distCard = document.getElementById('distanceCard');
+
+  numEl.textContent = distRounded > 9999 ? '9999+' : distRounded;
+
+  if (distRounded <= safeRange) {
+    numEl.className = 'distance-number';
+    labelEl.className = 'distance-status-label';
+    labelEl.textContent = '✅ Safe — within range';
+    distCard.classList.remove('alert-active');
+    alertShown = false;
+  } else if (distRounded <= safeRange * 1.5) {
+    numEl.className = 'distance-number warn';
+    labelEl.className = 'distance-status-label warn';
+    labelEl.textContent = '⚠️ Approaching limit';
+    distCard.classList.remove('alert-active');
+  } else {
+    numEl.className = 'distance-number danger';
+    labelEl.className = 'distance-status-label danger';
+    labelEl.textContent = '🚨 OUT OF SAFE RANGE!';
+    distCard.classList.add('alert-active');
+
+    if (!alertShown) {
+      alertShown = true;
+      triggerDistanceAlert(distRounded);
+    }
+  }
+}
+
+function triggerDistanceAlert(dist) {
+  showAlert(
+    '⚠️ Distance Alert!',
+    'You have moved beyond your safe range. Navigate back to your partner or call for help.',
+    'distance',
+    dist
+  );
+
+  // Vibrate
+  if (navigator.vibrate) navigator.vibrate([500, 200, 500, 200, 500]);
+
+  // Audio beep
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [0, 0.4, 0.8].forEach(t => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = 880;
+      gain.gain.setValueAtTime(0.3, ctx.currentTime + t);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.3);
+      osc.start(ctx.currentTime + t);
+      osc.stop(ctx.currentTime + t + 0.3);
+    });
+  } catch(e) {}
+}
+
+// --- Alert ---
+function showAlert(title, body, type, dist) {
+  document.getElementById('alertTitle').textContent = title;
+  document.getElementById('alertBody').textContent = body;
+  document.getElementById('alertDistance').textContent = dist ? dist + ' metres' : '';
+  document.getElementById('alertIcon').textContent = type === 'sos' ? '🆘' : '⚠️';
+  document.getElementById('alertOverlay').classList.add('show');
+}
+
+function dismissAlert() {
+  document.getElementById('alertOverlay').classList.remove('show');
+}
+
+// --- Emergency SOS ---
+function callEmergency() {
+  const sosPayload = { type: 'sos', from: myId };
+  if (conn && conn.open) {
+    try { conn.send(sosPayload); } catch(e) {}
+  } else if (broadcastChannel && partnerConnectedId) {
+    broadcastChannel.postMessage({ ...sosPayload, to: partnerConnectedId });
+  }
+
+  if (navigator.vibrate) navigator.vibrate([1000, 200, 1000]);
+
+  showToast('🆘 SOS sent to partner!');
+
+  // Try to call emergency
+  if (myLat !== null) {
+    const mapsUrl = `https://www.google.com/maps?q=${myLat},${myLng}`;
+    const message = `🆘 EMERGENCY at Kumbh Mela!\nBand ID: ${myId}\nLocation: ${mapsUrl}`;
+    const smsUrl = `sms:?body=${encodeURIComponent(message)}`;
+    window.open(smsUrl, '_blank');
+  }
+}
+
+// --- Navigate ---
+function navigateToPartner() {
+  if (partnerLat === null) { showToast('⚠️ Partner location not available yet.'); return; }
+  const url = `https://www.google.com/maps/dir/?api=1&destination=${partnerLat},${partnerLng}&travelmode=walking`;
+  window.open(url, '_blank');
+}
+
+// --- Safe Range ---
+function updateSafeRange(val) {
+  safeRange = parseInt(val);
+  document.getElementById('safeRangeLabel').textContent = val >= 1000 ? '1km' : val + 'm';
+  alertShown = false;
+  if (myLat !== null && partnerLat !== null) calculateAndShowDistance();
+}
+
+// --- Copy ID ---
+function copyId() {
+  const id = document.getElementById('myBandId').textContent;
+  navigator.clipboard.writeText(id).then(() => showToast('📋 Band ID copied!')).catch(() => {
+    // Fallback
+    const el = document.createElement('textarea');
+    el.value = id;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    showToast('📋 Band ID copied!');
+  });
+}
+
+// --- Status ---
+function setStatus(state, text) {
+  const dot = document.getElementById('statusDot');
+  dot.className = 'status-dot ' + state;
+  document.getElementById('statusText').textContent = text;
+}
+
+// --- Toast ---
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+// --- Start ---
+window.addEventListener('load', initPeer);
 </script>
 </body>
 </html>
